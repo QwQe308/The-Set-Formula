@@ -33,7 +33,7 @@ addLayer("b", {
         return new Decimal(exp);
     },
     costScalingStart: new Decimal(15),
-    costScalingInc() { return new Decimal(0.0317).sub(player.meta.buyables[32].gte(10) ? player.meta.buyables[32].mul(0.001) : n(0)).max(0.0001) },
+    costScalingInc() { return new Decimal(0.0317).sub(player.meta.buyables[32].gte(10) ? player.meta.buyables[32].mul(0.001) : n(0)).max(0) },
     canBuyMax() { return tmp.ac.unlocks>=4 },
     autoPrestige() { return player.meta.buyables[23].gte(55) },
     resetsNothing() { return player.meta.buyables[23].gte(55) },
@@ -45,7 +45,7 @@ addLayer("b", {
     canReset() { return tmp[this.layer].getResetGain.gte(1) },
     getResetGain() { 
         let gain = tmp[this.layer].baseAmount.times(tmp[this.layer].reqDiv).div(tmp[this.layer].requires).max(1).log(tmp[this.layer].base).root(tmp[this.layer].exponent)
-        if (gain.gte(tmp[this.layer].costScalingStart)) gain = gain.pow(tmp[this.layer].exponent).log(tmp[this.layer].costScalingStart).sub(tmp[this.layer].exponent).div(tmp[this.layer].costScalingInc).plus(tmp[this.layer].costScalingStart).plus(1).floor().sub(player[this.layer].points).max(0)
+        if (gain.gte(tmp[this.layer].costScalingStart) && tmp[this.layer].costScalingInc.gt(0)) gain = gain.pow(tmp[this.layer].exponent).log(tmp[this.layer].costScalingStart).sub(tmp[this.layer].exponent).div(tmp[this.layer].costScalingInc).plus(tmp[this.layer].costScalingStart).plus(1).floor().sub(player[this.layer].points).max(0)
         else gain = gain.plus(1).floor().sub(player[this.layer].points).max(0)
         if (!tmp[this.layer].canBuyMax) gain = gain.min(1);
         if (tmp[this.layer].baseAmount.times(tmp[this.layer].reqDiv).lt(tmp[this.layer].requires)) return new Decimal(0);
@@ -99,7 +99,7 @@ addLayer("b", {
             f = '20'
         }
 
-        let f2 = colorText('( ','#77bf5f')+colorText('( ','#bf8f8f')+"t<sub>2</sub> + RA<sub>p</sub>"+colorText(' ) × RB<sub>p</sub> × b','#bf8f8f')+colorText(' )<sup>RC<sub>p</sub></sup>','#77bf5f')
+        let f2 = colorText('( ','#77bf5f')+colorText('( ',1)+"t<sub>2</sub> + RA<sub>p</sub>"+colorText(' ) × RB<sub>p</sub> × b',1)+colorText(' )<sup>RC<sub>p</sub></sup>','#77bf5f')
         return [f,f2];
     },
     calculateValue(B=player[this.layer].points) {
@@ -163,8 +163,8 @@ addLayer("b", {
     },
     clickables: {
         11: {
-            display(){return '<big><big><big>B<sub>01</sub>: '+(player.b.powerData ? '开' : '关')+'</big></big><br>B<sub>01</sub> = '+formatWhole(player.b.power)+'</big>'},
-            displayEN(){return '<big><big><big>B<sub>01</sub>: '+(player.b.powerData ? 'ON' : 'OFF')+'</big></big><br>B<sub>01</sub> = '+formatWhole(player.b.power)+'</big>'},
+            display(){return '<big><big><big>B<sub>01</sub>: '+(player.b.powerData ? '开' : '关')+'</big></big><br>B<sub>01</sub> = '+formatWhole(player.b.power)+'</big><div style="height: 4px"></div>'},
+            displayEN(){return '<big><big><big>B<sub>01</sub>: '+(player.b.powerData ? 'ON' : 'OFF')+'</big></big><br>B<sub>01</sub> = '+formatWhole(player.b.power)+'</big><div style="height: 4px"></div>'},
             canClick(){return true},
             unlocked() { return tmp.goals.unlocks>=6 },
             onClick(){

@@ -14,6 +14,7 @@ function getStartOptions() {
 		forceOneTab: false,
 		oldStyle: false,
 		ch: undefined,
+		mouse: true,
 	}
 }
 
@@ -22,6 +23,9 @@ function toggleOpt(name) {
 		return;
 
 	options[name] = !options[name];
+	if(name == 'mouse'){
+		mouseSetting()
+	}
 	if (name == "hqTree")
 		changeTreeQuality();
 	if (name == "oldStyle")

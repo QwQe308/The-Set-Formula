@@ -17,6 +17,7 @@ addLayer("co", {
     color: "#efefef",
     tabFormat: [
         ["display-text", function() { return getPointsDisplay() }],
+        'buyables',
         ["display-text", function() { return tmp.co.unlocks>=1 ? "<h3>n("+formatWhole(player.points)+") = "+format(player.value)+"</h3>" : '' }],
         ["display-text", function() { return tmp.co.unlocks>=1 ? "n(t) = "+displayFormula() : '' }],
         ["display-text", function() { return tmp.co.unlocks>=1 ? "n(t) = "+displayIntFormula() : '' }],
@@ -42,12 +43,12 @@ addLayer("co", {
 
         "blank","blank","blank","blank",
 
-        ["display-text", function() { return tmp.co.unlocks>=1 && player.a2.points.lt(400) ? options.ch?"<h3>欧米茄能量开始于 α ≥ 400</h3>":"<h3>Compressed Energy Starts at n<sub>s</sub>(n) ≥ 200</h3>" : '' }],
-        ["display-text", function() { return tmp.co.unlocks>=1 && player.a2.points.gte(400) ? (options.ch?"<h3 id='points'>欧米茄能量 ":"<h3 id='points'>Compressed Energy ")+format(player.co.pointsO)+" J<sub>o</sub></h3>" : '' }],,
+        ["display-text", function() { return tmp.co.unlocks>=1 && player.a2.points.lt(400) ? options.ch?"<h3>欧米茄能量开始于 α ≥ 400</h3>":"<h3>Omega Energy Starts at n<sub>s</sub>(n) ≥ 200</h3>" : '' }],
+        ["display-text", function() { return tmp.co.unlocks>=1 && player.a2.points.gte(400) ? (options.ch?"<h3 id='points'>欧米茄能量 ":"<h3 id='points'>Omega Energy ")+format(player.co.pointsO)+" J<sub>o</sub></h3>" : '' }],,
         "blank",
         ["display-text", function() {
             if(options.ch) return tmp.co.unlocks>=1 && tmp.ac.unlocks>=6 && player.a2.points.gte(400) ? '<i style="color:#aaa">欧米茄能量</i> t <i style="color:#aaa">会以</i> x ( OmP + 1 ) <i style="color:#aaa">的速度增长<br><br></i> OmE <i style="color:#aaa">以指数的方式降低300之后的阿尔法需求<br></i>' : '' 
-            return tmp.co.unlocks>=1 && player.a2.points.gte(400) ? '<i style="color:#aaa">Compressed Energy Multplies</i> ( OoP + 1 ) <i style="color:#aaa">for every </i> t <i style="color:#aaa">passed</i>' : '' 
+            return tmp.co.unlocks>=1 && player.a2.points.gte(400) ? '<i style="color:#aaa">Omega Energy Multplies</i> ( OoP + 1 ) <i style="color:#aaa">for every </i> t <i style="color:#aaa">passed</i>' : '' 
         }],
         "blank",
         ["display-text", function() { return tmp.co.unlocks>=1 && tmp.ac.unlocks>=6 && player.a2.points.gte(400) ? "<h3>OmP("+format(player.a2.points)+") = "+format(player.co.valueO)+"</h3>" : '' }],
@@ -67,11 +68,11 @@ addLayer("co", {
         let f = 'Max( n<sub>s</sub> - 200, 0 ) × 50'
         if(tmp.ac.unlocks>=6){f = 'Max( n<sub>s</sub> - 200, 0 )<sup>50'+(player.meta.buyables[41].gte(150) ? ' + log<sub>5e11</sub>( CoP + 5e11 )' : '')+'</sup>'}
 
-        let f2 = colorText('( ','#77bf5f')+colorText('lg( ','#bf8f8f')+'Max( J - 1e200, 10 )'+colorText(' )','#bf8f8f')+colorText(' )<sup>0.1</sup>','#77bf5f')
+        let f2 = colorText('( ','#77bf5f')+colorText('lg( ',1)+'Max( J - 1e200, 10 )'+colorText(' )',1)+colorText(' )<sup>0.1</sup>','#77bf5f')
 
         let o = '( 10 + α<sup>0.3</sup> / 5 )<sup>α</sup>'
 
-        let o2 = colorText('1 / slog<sub>10</sub>( ','#bf8f8f')+' lg( J<sub>o</sub> ) + 10 '+colorText(' )','#bf8f8f')
+        let o2 = colorText('1 / slog<sub>10</sub>( ',1)+' lg( J<sub>o</sub> ) + 10 '+colorText(' )',1)
 
         return [f,f2,o,o2]
     },
@@ -107,14 +108,13 @@ addLayer("co", {
             player.co.pointsO = player.co.pointsO.max(1).mul(n(player.co.valueO).add(1).pow(diff))
         }
     },
-    branches: ["b"],
     buyables: {
         rows: 1,
         cols: 1,
         11: {
             unlockData: [
                 {
-                    desc: "重置之前的一切并开始获得压缩点数!<br><small>(这也会重置你的成就以及荣耀,但这是值得的!)<br><s>(也许没那么值得,但你必须重置)</s></small>",
+                    desc: "重置之前的一切并开始获得压缩点数!<br><small>(这也会重置你的目标以及荣耀,但这是值得的!)<br><s>(也许没那么值得,但你必须重置)</s></small>",
                     descEN: "Reset All Previous Features And Start Gaining Compressed Points!<br><small>(Also resets Goals and Glory,But it's worth it!)<br><s><i>(maybe not,but you must do so)</i></s></small>",
                     req: 0,
                 },

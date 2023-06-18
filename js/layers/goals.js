@@ -202,7 +202,7 @@ let goalAchData = {
         unlocked() { return tmp.goals.unlocks>=5 },
     },
     51: {
-        name: "也许你还需要一个成就",
+        name: "也许你还需要一个目标",
         nameEN: "You might need another goal",
         done() { return player.b.points.gte(4) },
         tooltip: "第四个B",
@@ -317,7 +317,7 @@ let goalAchData = {
         name: "欢迎回来",
         nameEN: "WWelcome Backk",
         done() { return n(tmp[this.layer].achsCompleted).add(n(tmp.ac.achsCompleted)).gte(42) },
-        tooltip: "获得42<sup>0.7</sup>个成就",
+        tooltip: "获得42<sup>0.7</sup>个目标",
         tooltipEN: "Get 42<sup>0.7</sup> Goals",
         unlocked() { return n(tmp[this.layer].achsCompleted).add(n(tmp.ac.achsCompleted)).gte(42) },
     },
@@ -381,7 +381,7 @@ let goalAchData = {
         name: "这是最后一个吗?",
         nameEN: "Is this the last one?",
         done() { return player.value.gte(n(69).pow(69).pow(6.9)) },
-        tooltip: "让 n(t) ≥ 69<sup>69<sup>6.9</sup></sup> = "+format(n(69).pow(69).pow(6.9))+'<br>你知道吗:这是原版游戏最后一个成就',
+        tooltip: "让 n(t) ≥ 69<sup>69<sup>6.9</sup></sup> = "+format(n(69).pow(69).pow(6.9))+'<br>你知道吗:这是原版游戏最后一个目标',
         tooltipEN: "Make n(t) ≥ 69<sup>69<sup>6.9</sup></sup> = "+format(n(69).pow(69).pow(6.9))+"<br>Do you know: It's the last goal in the original game!",
         unlocked() { return hasAchievement(this.layer, 84) },
     },
@@ -389,12 +389,12 @@ let goalAchData = {
         name: "显然不是!",
         nameEN: "Obviously NOT!",
         done() { return n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).gte(52) },
-        tooltip: "完成52<sup>0.7</sup>个成就!",
+        tooltip: "完成52<sup>0.7</sup>个目标!",
         tooltipEN: "Complete 52<sup>0.7</sup> Goals!",
         unlocked() { return n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).gte(52) },
     },
     91: {
-        name: "这是一个充满科技的成就",
+        name: "这是一个充满科技的目标",
         nameEN: "A cyber achevement (maybe)",
         done() { return player.value.gte('1e2077') },
         tooltip: "让 n(t) ≥ "+format(n("1e2077")),
@@ -444,16 +444,16 @@ let goalAchData = {
     101: {
         name: "这是有用的!",
         nameEN: "Obviously NOT!",
-        done() { return player.ro.c.gte('3500') },
-        tooltip: "获得3,500RoC",
+        done() { return player.ro.c.gte('7500') },
+        tooltip: "获得7,500RoC",
         tooltipEN: "Complete 52<sup>0.7</sup> Goals!",
         unlocked() { return hasAchievement(this.layer, 96) },
     },
     102: {
         name: "这也是有用的...吗?",
         nameEN: "Obviously NOT!",
-        done() { return player.ro.cPower.gte('1500') },
-        tooltip: "获得1,500RoC<sub>p</sub>",
+        done() { return player.ro.cPower.gte('5000') },
+        tooltip: "获得5,000RoC<sub>p</sub>",
         tooltipEN: "Complete 52<sup>0.7</sup> Goals!",
         unlocked() { return hasAchievement(this.layer, 96) },
     },
@@ -490,7 +490,7 @@ addLayer("goals", {
         unlocked: true,
         achievements: [],
     }},
-    symbol() { return options.ch ? '成就' : 'Goal' },
+    symbol() { return options.ch ? '目标' : 'Goal' },
     tooltip() {
         return false
     },
@@ -498,7 +498,7 @@ addLayer("goals", {
     tabFormat: [
         ["display-text", function() { return getPointsDisplay() }],
         ["display-text", function() {
-            if(options.ch) return "<h3>您已经完成 <span style='color: "+tmp[this.layer].color+"; font-size: 25px;'>"+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted))+"<sup>0.7</sup> = "+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7).floor())+"</span> 个成就</h3><br><small>(真实成就点:<span style='color: "+tmp[this.layer].color+";'>"+format(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7))+"</span>)<small>"
+            if(options.ch) return "<h3>您已经完成 <span style='color: "+tmp[this.layer].color+"; font-size: 25px;'>"+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted))+"<sup>0.7</sup> = "+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7).floor())+"</span> 个目标</h3><br><small>(真实目标点:<span style='color: "+tmp[this.layer].color+";'>"+format(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7))+"</span>)<small>"
             return  "<h3>You have completed <span style='color: "+tmp[this.layer].color+"; font-size: 25px;'>"+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted))+"<sup>0.7</sup> = "+formatWhole(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7).floor())+"</span> Goals</h3><br><small>(Real Goals Completed:<span style='color: "+tmp[this.layer].color+";'>"+format(n(tmp[this.layer].achsCompleted).add(tmp.ac.achsCompleted).pow(0.7))+"</span>)<small>"
         }],
         "blank", "buyables", 
@@ -594,7 +594,7 @@ addLayer("goals", {
             display() { 
                 let data = tmp[this.layer].buyables[11].retrieveUnlockData
                 if (!data) return "???";
-                else return "要求: "+formatWhole(data.req)+" 成就";
+                else return "要求: "+formatWhole(data.req)+" 目标";
             },
             displayEN() { 
                 let data = tmp[this.layer].buyables[11].retrieveUnlockData

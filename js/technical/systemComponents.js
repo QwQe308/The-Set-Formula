@@ -1,6 +1,9 @@
 function getActiveClass(layer){
+	if(layer=='info-tab'){layer = 'Information'}
+	if(layer=='options-tab'){layer = 'Setting'}
+	if(layer=='changelog-tab'){layer = 'Changelog'}
 	$("button").removeClass("active");
-	document.getElementById(layer).classList.add('active')
+	$('#'+layer).addClass('active')
 }
 
 var systemComponents = {
@@ -9,10 +12,21 @@ var systemComponents = {
 		template: `
 			<div class="upgRow">
 				<div v-for="tab in Object.keys(data)">
-					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
+					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked"
+					v-bind:class="{
+						tabButton: true,
+						notify: subtabShouldNotify(layer, name, tab),
+						resetNotify: subtabResetNotify(layer, name, tab),
+						AcSub: tab==player.subtabs[layer][name]
+					}"
+					:class=""
+					v-bind:id="[tab]"
 					v-bind:style="[{'border-color': tmp[layer].color}, (data[tab].glowColor && subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + data[tab].glowColor} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
-						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
-				</div>
+					v-on:click="function(){
+						player.subtabs[layer][name] = tab
+						updateTabFormats()
+						needCanvasUpdate = true
+					}">{{tab}}</button>
 			</div>
 		`
 	},
@@ -174,7 +188,7 @@ var systemComponents = {
 			<h6 style="color:#aaa">(我不知道我应该在这行字里写什么)</h6>
 		</div>
 		<div style="border: 3px solid #888; width:300px; height:30px; margin-top: 8px; padding:15px; border-radius: 5px; display: inline-table">
-			<h3>已完成成就:</h3><br>
+			<h3>已完成目标:</h3><br>
 			{{ formatWhole(n(tmp.goals.achsCompleted)) + (n(tmp.ac.achsCompleted).gte(1) || tmp.goals.unlocks>=3 ? (' + ' + formatWhole(n(tmp.ac.achsCompleted))) + ' = ' + formatWhole(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted)) : ('')) }}<br><br>
 			<h6 style="color:#aaa">(但是为了美观我得写这些)</h6>
 		</div>
@@ -237,12 +251,14 @@ var systemComponents = {
                 <td><button class="opt" onclick="toggleOpt('hideChallenges')">{{options.ch?'已完成挑战':'Completed Challenges'}}: {{ options.hideChallenges?(options.ch?"隐藏":"HIDDEN"):(options.ch?"显示":"SHOWN") }}</button></td>
                 <td><button class="opt" onclick="adjustMSDisp()">{{options.ch?'显示里程碑':'Show Milestones'}}: {{options.ch? MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)] : MS_DISPLAYS_EN[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
                 <td><button class="opt" onclick="toggleOpt('forceOneTab'); needsCanvasUpdate = true">{{options.ch?'节点内容占据整个屏幕':'Single-Tab Mode'}}: {{ options.forceOneTab?(options.ch?"永远这样":"ALWAYS"):(options.ch?"自动调节":"AUTO") }}</button></td>
-			</tr> 
-			<br>
+			</tr> <br>
+			<tr>
+                <td><button class="opt" onclick="toggleOpt('mouse')">优化鼠标操作: {{ options.mouse ? "启用":"关闭"}}</button></td>
+			</tr><br>
 			<tr>
 				<td><button class="opt" onclick="
                 options.ch = !options.ch;
-                needsCanvasUpdate = true; document.title = options.ch?'公式树NG--':'The Formula NG--';
+                needsCanvasUpdate = true; document.title = options.ch?'集合公式':'The Set Formula';
                 VERSION.withName = VERSION.withoutName + (VERSION.name ? ': ' + (options.ch? VERSION.name :VERSION.nameEN) : '')
                 ">{{options.ch?'语言':'Language'}}: {{ options.ch?"中文(Chinese)":"英文(English)" }}</button></td>
 			</tr>

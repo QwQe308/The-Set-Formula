@@ -12,7 +12,32 @@ let modInfo = {
 }
 
 function colorText(id,id2){
+	if(id2==0){id2 = '#dfdfdf'}
+	if(id2==1){id2 = '#bf8f8f'}
+	if(id2==2){id2 = '#77bf5f'}
+	if(id2==3){id2 = '#ffbf00'}
+	if(id2==4){id2 = '#68a4f1'}
 	return "<span style='color:"+id2+"'>"+id+"</span>"
+}
+
+function getTimeSpeedFormula() {
+	let f = colorText("1.5",0)
+	let ad = ''
+	let ac = ''
+	let ac2 = ''
+	if(tmp.goals.unlocks>=1){
+		f = '1.5 × Max( timewall, 0 )'
+	}
+	if(tmp.goals.unlocks>=2){ad = ' + Avolve'}
+	if(tmp.ac.unlocks>=1){
+		ac = colorText('( ', 1)
+		ac2 = colorText(' ) × 2', 1)
+	}
+	f += ad
+	ac += f
+	f = ac
+	f += ac2
+	return f;
 }
 
 function displayFormula() {
@@ -25,11 +50,11 @@ function displayFormula() {
 	}
 
 	if(player.b.points.gte(1)){
-		b = 't<sup>'+colorText('log<sub>3</sub>( ','#bf8f8f')+'b + '+ro1+' '+colorText( ') + 1','#bf8f8f')+'</sup>'
+		b = 't<sup>'+colorText('log<sub>3</sub>( ',1)+'b + '+ro1+' '+colorText( ') + 1',1)+'</sup>'
 		b2 = 'b × 200'
 	}
 
-	let f = colorText('lg(','#77bf5f')+colorText(' Max( ','#bf8f8f')+b+" × a, "+b2+colorText(' ) ','#bf8f8f')+colorText(' )','#77bf5f')
+	let f = colorText('lg(','#77bf5f')+colorText(' Max( ',1)+b+" × a, "+b2+colorText(' ) ',1)+colorText(' )','#77bf5f')
 	let m = ''
 	let g3 = ''
 	let f3 = ''
@@ -40,7 +65,7 @@ function displayFormula() {
 	}
 
 	if(tmp.goals.unlocks>=1){
-		f = colorText('lg(','#77bf5f')+colorText(' Max( ','#bf8f8f')+b+" × a, "+b2+colorText(' )<sup>exp</sup> ','#bf8f8f')+colorText(' ) ×','#77bf5f')
+		f = colorText('lg(','#77bf5f')+colorText(' Max( ',1)+b+" × a, "+b2+colorText(' )<sup>exp</sup> ',1)+colorText(' ) ×','#77bf5f')
 		m = colorText(' mul','#77bf5f')
 	}
 
@@ -78,11 +103,11 @@ function displayIntFormula() {
 	}
 
 	if(player.b.points.gte(1)){
-		b = format(player.points.mul(tmp.timeSpeed))+'<sup>'+colorText('log<sub>'+format(n(3))+'</sub>( ', '#bf8f8f')+format(player.b.value)+' + '+format(ro1)+colorText(' ) + '+format(n(1)),'#bf8f8f')+'</sup>'
+		b = format(player.points.mul(tmp.timeSpeed))+'<sup>'+colorText('log<sub>'+format(n(3))+'</sub>( ', 1)+format(player.b.value)+' + '+format(ro1)+colorText(' ) + '+format(n(1)),1)+'</sup>'
 		b2 = format(player.b.value.mul(200))
 	}
 
-	let f = colorText('lg(','#77bf5f')+colorText(' Max( ','#bf8f8f')+b+" × "+format(player.a.value)+", "+format(b2)+colorText(') ','#bf8f8f')+colorText(' )','#77bf5f')
+	let f = colorText('lg(','#77bf5f')+colorText(' Max( ',1)+b+" × "+format(player.a.value)+", "+format(b2)+colorText(') ',1)+colorText(' )','#77bf5f')
 	let m = ''
 	let g3 = ''
 	let f3 = ''
@@ -93,7 +118,7 @@ function displayIntFormula() {
 	}
 
 	if(tmp.goals.unlocks>=1){
-		f = colorText('lg(','#77bf5f')+colorText(' Max( ','#bf8f8f')+b+" × "+format(player.a.value)+", "+format(b2)+colorText(' )<sup>'+format(player.a2.value)+'</sup> ','#bf8f8f')+colorText(' ) ×','#77bf5f')
+		f = colorText('lg(','#77bf5f')+colorText(' Max( ',1)+b+" × "+format(player.a.value)+", "+format(b2)+colorText(' )<sup>'+format(player.a2.value)+'</sup> ',1)+colorText(' ) ×','#77bf5f')
 		m = colorText(' '+format(player.a2.valueBeta),'#77bf5f')
 	}
 
@@ -179,19 +204,23 @@ let VERSION = {
 let changelog = `<br><br><br><h1>更新日志:</h1><br>(不存在<span style='color: red'><s>剧透警告</s></span>)<br><br>
 	<h3>v1.0 - 史无前例的改动</h3><br>
 		- 开发了 <spoiler>元</spoiler><br>
-		- 平衡到 63<sup>0.7</sup>成就<spoiler>...吗?</spoiler><br>
-		- 修复了 <spoiler>J</spoiler> 过早展示的问题<br>
-		- 修复了因为 <spoiler>轮盘</spoiler> 中含有中文而导致存档在 <spoiler>转动轮盘</spoiler> 前无法导出的问题<br>
-		- 修复了 <spoiler>进化</spoiler> 可能会NaN的问题<br>
-		- 修复了 discord 链接文不对题的问题<br>
+		- 平衡到 63<sup>0.7</sup>目标<spoiler>...吗?</spoiler><br>
 		- 修复了 <spoiler>n</spoiler> 公式显示错误的问题<br>
+		- 修复了 <spoiler>荣耀</spoiler> 效果显示比实际少的问题<br>
+		- 修复了 <spoiler>进化</spoiler> 可能会NaN的问题<br>
 		- 修复了 <spoiler>b层级电池</spoiler> 公式错误的问题<br>
-		- 修改了 <spoiler>b层级</spoiler> 的颜色<br>
-		- 修改了 <spoiler>轮盘</spoiler> 的一些细节,并将其名字从 <spoiler>转盘</spoiler> 改为 <spoiler>轮盘</spoiler><br>
-		- 修改了 <spoiler>成就</spoiler> 的UI<br>
-		- 修改了 <spoiler>荣耀</spoiler> 对于 <spoiler>轮盘</spoiler> 的奖励<br>
+		- 修复了 <spoiler>轮盘</spoiler> 中含有中文而导致存档在 <spoiler>转动轮盘</spoiler> 前无法导出的问题<br>
+		- 修复了 <spoiler>J</spoiler> 过早展示的问题<br>
+		- 修复了 discord 链接文不对题的问题<br>
+		- 修复了 中英文不完全或错误的问题<br>
+		- 修复了 颜色不统一的问题<br>
 		- 修改了 <spoiler>t</spoiler> 使其持续显示<br>
+		- 修改了 <spoiler>目标</spoiler> 的UI, 并将其中文名从 <spoiler>成就</spoiler> 改为 <spoiler>目标</spoiler><br>
+		- 修改了 <spoiler>荣耀</spoiler> 对于 <spoiler>轮盘</spoiler> 的奖励<br>
+		- 修改了 <spoiler>b层级</spoiler> 的颜色<br>
+		- 修改了 <spoiler>轮盘</spoiler> 的一些细节, 并将其名字从 <spoiler>转盘</spoiler> 改为 <spoiler>轮盘</spoiler><br>
 		- 修改了 后台运行机制使其后台效果更好<br>
+		- 修改了 字体<br>
 		- 修改了 残局页面<br>
 		- 完全重置 UI,这使这棵树一点也不像树<br>
 		- 完全重置 i 页面<br>
@@ -206,46 +235,46 @@ let changelog = `<br><br><br><h1>更新日志:</h1><br>(不存在<span style='co
 	<br><br>
 	<h3>v0.2.5 - 新阶段!</h3><br>
 		- 开发了 <spoiler>压缩点数</spoiler><br>
-		- 平衡到53<sup>0.7</sup>成就<br>
+		- 平衡到53<sup>0.7</sup>目标<br>
 		- 轻微加快了前期的速度<br>
 		- 现在翻译会在开局时独立选择而不是使用弹窗询问<br>
 		<br>
         - 翻译 - 现在在游戏内切换语言会更改页面标题了<br>
         - 翻译 - i 页面的翻译更好了(然后还是没多好)<br>
-        - 翻译 - 添加了英文的更新日志(前边的翻译更新日志懒得补了)<br>
+        - 翻译 - 添加了英文的更新日志<br>
 	<br><br>
 	<h3>v0.2.4 - 电池?</h3><br>
 		- 重新创建基础内容<br>
 		- 完全重新制作了 <spoiler>电池</spoiler><br>
-		- 平衡到40<sup>0.7</sup>成就<br>
+		- 平衡到40<sup>0.7</sup>目标<br>
 	<br><br>
 	<h3>v0.2.3 - 远离赌博!</h3><br>
 		- 重新创建基础内容<br>
 		- 开发了<spoiler>轮盘</spoiler><br>
-		- 平衡到35<sup>0.7</sup>成就<br>
+		- 平衡到35<sup>0.7</sup>目标<br>
 	<br><br>
 	<h3>v0.2 - 跳跃即巅峰</h3><br>
 		- 重新创建基础内容<br>
 		- 开发了 <spoiler>阿尔法能量</spoiler><br>
 		- 开发了 <spoiler>荣耀</spoiler><br>
-		- 平衡到17<sup>0.7</sup>成就<br>
+		- 平衡到17<sup>0.7</sup>目标<br>
 	<br><br>
 	<h4 style='color: #00FFFF'>↑从这里开始皆为NG--的内容↑</h4>
 	<br><br>
 	<h3>v0.1.2 - 集合</h3><br>
 		- 开发了 <spoiler>集合</spoiler><br>
-		- 平衡到47成就<br>
+		- 平衡到47目标<br>
 	<br><br>
 	<h3>v0.1.1 - 更多字母, 更有趣的游戏</h3><br>
 		- 开发了 <spoiler>C能量</spoiler> & <spoiler>钟</spoiler><br>
-		- 平衡到36成就<br>
+		- 平衡到36目标<br>
 	<br><br>
 	<h3>v0.1 - 学习字母</h3><br>
 		- 创建基础内容<br>
 		- 开发了 <spoiler>A能量</spoiler> & <spoiler>进化</spoiler><br>
-		- 开发了 <spoiler>成就</spoiler><br>
+		- 开发了 <spoiler>目标</spoiler><br>
 		- 开发了 <spoiler>B能量</spoiler>和<spoiler>电池</spoiler><br>
-		- 平衡到19成就<br>`
+		- 平衡到19目标<br>`
 
 let changelogEN = `<br><br><br><h1>Changelog:</h1><br>(<span style='color: red'>Spoilers Warning</span>)<br><br>
     <h3>v0.2.5 - New Stage!</h3><br>
@@ -335,26 +364,6 @@ function getTimeSpeed() {
 	return spd;
 }
 
-function getTimeSpeedFormula() {
-	let f = "1.5"
-	let ad = ''
-	let ac = ''
-	let ac2 = ''
-	if(tmp.goals.unlocks>=1){
-		f = colorText('1.5 × Max( ','#bf8f8f')+'timewall, 0'+colorText(' )','#bf8f8f')
-	}
-	if(tmp.goals.unlocks>=2){ad = colorText(' + Avolve','#bf8f8f')}
-	if(tmp.ac.unlocks>=1){
-		ac = colorText('( ','#77bf5f')
-		ac2 = colorText(' ) × 2','#77bf5f')
-	}
-	f += ad
-	ac += f
-	f = ac
-	f += ac2
-	return f;
-}
-
 // Calculate points/sec!
 function getPointGen() {
 	if(!canGenPoints())
@@ -376,22 +385,31 @@ function addedPlayerData() { return {
 }}
 
 function displayThingsRes(){
+	let lf = ''
+	if(true){lf += (options.ch? 'n(t) ' : 'n(t) ')+format(player.value)+' | '}
+	if(tmp.co.unlocks>=1){lf += (options.ch? 'n<small>s</small>(n) ' : 'n<small>s</small>(n) ')+format(player.superValue)+' | '}
+	if(true){lf += '<br>'}
 	let l0 = ''
 	if(layerDisplay('a')){l0 += (options.ch? 'A能量 ' : 'A-Power ')+format(player.a.points)+' | '}
+	if(layerDisplay('a')){l0 += (options.ch? 'a ' : 'a ')+format(player.a.value)+' | '}
 	if(layerDisplayTotal(['a'])){l0 += '<br>'}
-	layerDisplayTotal
 	let l1 = ''
 	if(layerDisplay('a2')){l1 += (options.ch? '阿尔法能量 ' : 'Alpha Energy ')+format(player.a2.points)+' | '}
-	if(layerDisplay('ro')){l1 += (options.ch? '轮盘能量 ' : 'Wheel Energy ')+format(player.ro.points)+' | '}
+	if(layerDisplay('ro')){l1 += (options.ch? '轮盘能量 ' : 'Wheel Energy ')+format(player.ro.points.max(0))+' | '}
 	if(layerDisplayTotal(['a2','ro'])){l1 += '<br>'}
 	let l2 = ''
 	if(layerDisplay('b')){l2 += (options.ch? 'B能量 ' : 'B-Power ')+format(player.b.points)+' | '}
+	if(layerDisplay('b') && tmp.goals.unlocks>=6){l2 += (options.ch? 'B<small>01</small> ' : 'B<small>01</small> ')+format(player.b.power)+' | '}
 	if(layerDisplayTotal(['b'])){l2 += '<br>'}
+	let l3 = ''
+	if(tmp.co.unlocks>=1 && player.co.points.gt(1)){l3 += (options.ch? '压缩能量 ' : 'Compressed Energy ')+format(player.co.points)+' | '}
+	if(tmp.co.unlocks>=1 && player.co.pointsO.gt(1)){l3 += (options.ch? '欧米茄能量 ' : 'Omega Energy ')+format(player.co.pointsO)+' | '}
+	if(tmp.co.unlocks>=1){l3 += '<br>'}
 	let ls = ''
-	if(layerDisplay('goals')){ls += (options.ch? '成就 ' : 'Goals ')+formatWhole(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted))+"<sup>0.7</sup> = "+formatWhole(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted).pow(0.7).floor())+' | '}
+	if(layerDisplay('goals')){ls += (options.ch? '目标 ' : 'Goals ')+formatWhole(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted))+"<sup>0.7</sup> = "+formatWhole(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted).pow(0.7).floor())+' ('+format(n(tmp.goals.achsCompleted).add(tmp.ac.achsCompleted).pow(0.7))+') | '}
 	if(layerDisplay('ac')){ls += (options.ch? '荣耀 ' : 'Glory ')+formatWhole(tmp.ac.achsCompleted)+' | '}
 	if(layerDisplayTotal(['goals','ac'])){ls += '<br>'}
-	return l0+l1+l2+ls
+	return lf+l0+l1+l2+l3+ls
 }
 
 // Display extra things at the top of the page
@@ -399,7 +417,7 @@ var displayThings = [
 	function() {
 		if(options.ch == undefined){return '<big><br>You should choose your language first<br>你需要先选择语言</big>'}
 		let f = tmp.co.unlocks>=1 ? '<br><br>n<sub>s</sub>(n) = '+displayIntFormulaSuper()+' = '+format(player.superValue) : '<br><br>n(t) = '+displayIntFormula()+' = '+format(player.value)
-		return '<div class="res">'+displayThingsRes()+'</div>timespeed = '+getTimeSpeedFormula()+f+'<br><br><div class="vl2"></div>'
+		return '<div class="res">'+displayThingsRes()+'</div>timespeed = '+getTimeSpeedFormula()+f+'<br><br><div class="vl2"></div></span>'
 	}
 ]
 
@@ -430,21 +448,40 @@ function fixOldSave(oldVersion){
 		options.ch = undefined
 	}
 }
-/*
-document.oncontextmenu = function(event){
-	event.preventDefault()
-}
 
-if(document.all){
-	document.onselectstart = function(){
-		return false
-	}
-}else{
-	document.onmousedown = function(){
-		return false
-	}
-	document.onmouseup = function(){
-		return true
+function mouseSetting(){
+	if(options.mouse==true){
+		document.oncontextmenu = function(event){
+			event.preventDefault()
+		}
+	
+		if(document.all){
+			document.onselectstart = function(){
+				return false
+			}
+		}else{
+			document.onmousedown = function(){
+				return false
+			}
+			document.onmouseup = function(){
+				return true
+			}
+		}
+	}else{
+		document.oncontextmenu = function(event){
+		}
+	
+		if(document.all){
+			document.onselectstart = function(){
+				return true
+			}
+		}else{
+			document.onmousedown = function(){
+				return true
+			}
+			document.onmouseup = function(){
+				return false
+			}
+		}
 	}
 }
-*/

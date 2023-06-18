@@ -1,16 +1,17 @@
 * {
 	text-align: center;
-	font-family: "Inconsolata", monospace;
+	font-family: "Inconsolata",cursive, monospace;
 	font-weight: bold;
 	table-align: center;
 	margin: auto;
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
+	user-select: none
 }
 
 h1, h2, h3, b, input, .pesterlog > * > * {
 	display: inline;
-	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console",cursive, monospace;
 }
 
 *:focus {
@@ -121,19 +122,18 @@ td {
 }
 
 .col {
-	width: 304px;
+	width: 303px;
 	height: 100%;
 	min-height: 100%;
 	column-span: 1;
 	position: absolute;
 	overflow-y: auto;
-	overflow-x: auto;
+	overflow-x: hidden;
 	transition-duration: 0s
 }
 
 .col::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
 }
 
 .col::-webkit-scrollbar-thumb {
@@ -142,9 +142,9 @@ td {
 }
 
 .col2 {
-	width: calc(100% - 300px);
+	width: calc(100% - 303px);
 	height: 100%;
-	left: 300px;
+	left: 303px;
 	min-height: 100%;
 	column-span: 1;
 	position: absolute;

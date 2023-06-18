@@ -28,7 +28,6 @@ addLayer("ro", {
 
         last: '无上次记录',
 
-        //tmpValues
         autoSpinTimer:n(0),
     }},
     color: "#aaa",
@@ -42,26 +41,18 @@ addLayer("ro", {
         return n(1)
     },
     displayFormula(){
-        let f = 'b / 2'
-        /* if(tmp.ac.unlocks>=5){
-            f = '( b / 2 )<sup>1 / '+colorText(' Max( ','#bf8f8f')+(options.ch?'( 轮盘能量 - 轮盘能量上限 ) / 400, 1 ':'( Wheel Energy - Wheel Energy Cap ) / 400, 1 ')+colorText(' ) ','#bf8f8f')+'</sup>'
-        } */
+        let f = 'b × 1.5'
 
         let f2 = 'RoA<sup>0.75</sup> + 1'
 
         let f3 = 'RoB / 50'
 
-        let f4 = colorText('( ','#77bf5f')+colorText('log<sub>100</sub>(','#bf8f8f')+' RoC + 100 '+colorText(' ) ','#bf8f8f')+colorText(')<sup>0.3</sup> ','#77bf5f')
+        let f4 = colorText('( ','#77bf5f')+colorText('log<sub>100</sub>(',1)+' RoC + 100 '+colorText(' ) ',1)+colorText(')<sup>0.3</sup> ','#77bf5f')
 
         return [f,f2,f3,f4]
     },
     calculateValue(val=player.b.value) {
-        val = val.div(2)
-        /* if(tmp.ac.unlocks>=5){
-            val = val.pow(n(1).div(player.ro.points.sub(n(tmp.ac.unlocks>=4 ? 7 : 5).mul(100)).mul(0.0025).max(1)))
-        } */
-
-        return val;
+        return val.mul(1.5);
     },
     calculateValueRo(){
         let f = player.ro.a.pow(0.75).add(1)
@@ -91,7 +82,7 @@ addLayer("ro", {
         return tmp.ro.roLevel>=2 ? '0.1 ~ 100' : '0.1 ~ 10'
     },
     roRare(){
-        return tmp.ro.roLevel>=2 ? 'RoA —— 70%<br>RoB —— 22.5%<br>RoC —— 7.5%' : 'RoA —— 92.5%<br>RoB —— 7.5%'
+        return tmp.ro.roLevel>=2 ? 'RoA —— 70%<br>RoB —— 20%<br>RoC —— 10%' : 'RoA —— 90%<br>RoB —— 10%'
     },
     update(diff) {
         if(player.ro.last=='none'){
@@ -113,7 +104,7 @@ addLayer("ro", {
             if(tmp.ac.unlocks>=5){
                 player.ro.points = player.ro.points.add(n(player.ro.value).mul(diff)).max(0)
             }else{
-                player.ro.points = player.ro.points.add(n(player.ro.value).mul(diff)).min(n(tmp.ro.roReq).mul(/* tmp.ac.unlocks>=4 ? 7 :  */5)).max(0)
+                player.ro.points = player.ro.points.add(n(player.ro.value).mul(diff)).min(n(tmp.ro.roReq).mul(5)).max(0)
             }
         }else{
             player.ro.points = n(0)
@@ -143,13 +134,11 @@ addLayer("ro", {
 	},
 	clickables: {
 		11: {
-			title(){return "<big><big><big>轮盘!</big></big></big>"},
-			titleEN:"<big><big><big>Spin Wheel!</big></big></big>",
             display(){
-                return (tmp.ro.roLevel>=2 ? '等级: 2<br>' : '')+'<br><big><big>'+tmp.ro.roRare+'<br><br>数量:'+tmp.ro.roNum+'</big><br><br>上次:<br>'+tmp.ro.clickables[11].last+'</big>'
+                return "<h1>轮盘!</h1><br>"+(tmp.ro.roLevel>=2 ? '等级: 2<br>' : '')+'<br><big><big>'+tmp.ro.roRare+'<br><br>数量:'+tmp.ro.roNum+'</big><br><br>上次:<br>'+tmp.ro.clickables[11].last+'</big>'
             },
             displayEN(){
-                return (tmp.ro.roLevel>=2 ? 'Level: 2<br>' : '')+'<br><big><big>'+tmp.ro.roRare+'<br><br>Amount:'+tmp.ro.roNum+'</big><br><br>Last:<br> '+((tmp.ro.clickables[11].last==="无上次记录")?"No Result Yet":tmp.ro.clickables[11].last)+'</big>'
+                return "<h1>Spin!</h1><br>"+(tmp.ro.roLevel>=2 ? 'Level: 2<br>' : '')+'<br><big><big>'+tmp.ro.roRare+'<br><br>Amount:'+tmp.ro.roNum+'</big><br><br>Last:<br> '+((tmp.ro.clickables[11].last==="无上次记录")?"No Result Yet":tmp.ro.clickables[11].last)+'</big>'
             },
             last(){return player.ro.last},
 			canClick(){
@@ -162,82 +151,84 @@ addLayer("ro", {
                 let lastC = n(0)
 
                 let maxT = 1
-                for(let i = 1;i<=maxT;i++){
-                    if(player.ro.points.lt(tmp.ro.roReq)){break}
-                    if(player.ro.points.lt(bulk)){bulk = player.ro.points.div(tmp.ro.roReq)}
-                    if(tmp.ac.unlocks>=6){maxT = 5}
-                    let pow = tmp.ro.roLevel>=2 ? n(Math.random() * 3 - 1) : n(Math.random() * 2 - 1)
-                    let num = n(10).pow(pow)
-    
-                    let a = (Math.random() * 100)
+                if((player.ro.points.gte(tmp.ro.roReq.mul(2)) && player.meta.buyables[21].gte(15)) || player.meta.buyables[21].lt(15)){
+                    for(let i = 1;i<=maxT;i++){
+                        if(player.ro.points.lt(tmp.ro.roReq.mul(2))){break}
+                        if(player.ro.points.lt(bulk)){bulk = player.ro.points.div(tmp.ro.roReq.mul(2))}
+                        if(tmp.ac.unlocks>=6){maxT = 5}
+                        let pow = tmp.ro.roLevel>=2 ? n(Math.random() * 3 - 1) : n(Math.random() * 2 - 1)
+                        let num = n(10).pow(pow)
+        
+                        let a = (Math.random() * 100)
 
-                    num = num.mul(bulk)//批量倍率
+                        num = num.mul(bulk)//批量倍率
 
-                    if(tmp.ro.roLevel>=2){
-                        if(a>=92.5){
-                            if(player.meta.buyables[22].gte(6)){
-                                player.ro.c = player.ro.c.add(num)
-                                player.ro.cPower = player.ro.cPower.add(num)
-                            }else if(player.b.powerData){
-                                player.ro.cPower = player.ro.cPower.add(num)
+                        if(tmp.ro.roLevel>=2){
+                            if(a>=90){
+                                if(player.meta.buyables[22].gte(6)){
+                                    player.ro.c = player.ro.c.add(num)
+                                    player.ro.cPower = player.ro.cPower.add(num)
+                                }else if(player.b.powerData){
+                                    player.ro.cPower = player.ro.cPower.add(num)
+                                }else{
+                                    player.ro.c = player.ro.c.add(num)
+                                }
+            
+                                lastC = lastC.add(num)
+                            }else if(a>=70){
+                                if(player.meta.buyables[22].gte(6)){
+                                    player.ro.b = player.ro.b.add(num)
+                                    player.ro.bPower = player.ro.bPower.add(num)
+                                }else if(player.b.powerData){
+                                    player.ro.bPower = player.ro.bPower.add(num)
+                                }else{
+                                    player.ro.b = player.ro.b.add(num)
+                                }
+            
+                                lastB = lastB.add(num)
                             }else{
-                                player.ro.c = player.ro.c.add(num)
+                                if(player.meta.buyables[22].gte(6)){
+                                    player.ro.a = player.ro.a.add(num)
+                                    player.ro.aPower = player.ro.aPower.add(num)
+                                }else if(player.b.powerData){
+                                    player.ro.aPower = player.ro.aPower.add(num)
+                                }else{
+                                    player.ro.a = player.ro.a.add(num)
+                                }
+            
+                                lastA = lastA.add(num)
                             }
-        
-                            lastC = lastC.add(num)
-                        }else if(a>=70){
-                            if(player.meta.buyables[22].gte(6)){
-                                player.ro.b = player.ro.b.add(num)
-                                player.ro.bPower = player.ro.bPower.add(num)
-                            }else if(player.b.powerData){
-                                player.ro.bPower = player.ro.bPower.add(num)
-                            }else{
-                                player.ro.b = player.ro.b.add(num)
-                            }
-        
-                            lastB = lastB.add(num)
                         }else{
-                            if(player.meta.buyables[22].gte(6)){
-                                player.ro.a = player.ro.a.add(num)
-                                player.ro.aPower = player.ro.aPower.add(num)
-                            }else if(player.b.powerData){
-                                player.ro.aPower = player.ro.aPower.add(num)
-                            }else{
-                                player.ro.a = player.ro.a.add(num)
-                            }
+                            if(a>=90){
+                                if(player.meta.buyables[22].gte(6)){
+                                    player.ro.b = player.ro.b.add(num)
+                                    player.ro.bPower = player.ro.bPower.add(num)
+                                }else if(player.b.powerData){
+                                    player.ro.bPower = player.ro.bPower.add(num)
+                                }else{
+                                    player.ro.b = player.ro.b.add(num)
+                                }
         
-                            lastA = lastA.add(num)
-                        }
-                    }else{
-                        if(a>=92.5){
-                            if(player.meta.buyables[22].gte(6)){
-                                player.ro.b = player.ro.b.add(num)
-                                player.ro.bPower = player.ro.bPower.add(num)
-                            }else if(player.b.powerData){
-                                player.ro.bPower = player.ro.bPower.add(num)
+                                lastB = lastB.add(num)
                             }else{
-                                player.ro.b = player.ro.b.add(num)
+                                if(player.meta.buyables[22].gte(6)){
+                                    player.ro.a = player.ro.a.add(num)
+                                    player.ro.aPower = player.ro.aPower.add(num)
+                                }else if(player.b.powerData){
+                                    player.ro.aPower = player.ro.aPower.add(num)
+                                }else{
+                                    player.ro.a = player.ro.a.add(num)
+                                }
+        
+                                lastA = lastA.add(num)
                             }
-    
-                            lastB = lastB.add(num)
-                        }else{
-                            if(player.meta.buyables[22].gte(6)){
-                                player.ro.a = player.ro.a.add(num)
-                                player.ro.aPower = player.ro.aPower.add(num)
-                            }else if(player.b.powerData){
-                                player.ro.aPower = player.ro.aPower.add(num)
-                            }else{
-                                player.ro.a = player.ro.a.add(num)
-                            }
-    
-                            lastA = lastA.add(num)
                         }
                     }
-    
-                    player.ro.points = player.ro.points.sub(tmp.ro.roReq.mul(bulk))
+
+                    player.ro.last = (lastA.gt(0) ? format(lastA)+' RoA ' : '') + (lastB.gt(0) ? format(lastB)+' RoB ' : '') + (lastC.gt(0) ? format(lastC)+' RoC ' : '')
+                    player.ro.points = player.ro.points.sub(tmp.ro.roReq.mul(bulk)).max(0)
                 }
 
-                player.ro.last = (lastA.gt(0) ? format(lastA)+' RoA ' : '') + (lastB.gt(0) ? format(lastB)+' RoB ' : '') + (lastC.gt(0) ? format(lastC)+' RoC ' : '')
 			},
 			style() {return {'height': "270px", 'min-height': "270px", 'width': '270px',"border-radius": "50%","border-color": tmp.ro.roLevel>=2 ? 'yellow' : ''}},
             onHold(){return this.onClick()},

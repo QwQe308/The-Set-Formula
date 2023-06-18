@@ -76,8 +76,8 @@ addLayer("a", {
         if(player.ro.b.gt(0)){po = "<sup> + RB</sup>"}
         f += po
 
-        let f2 = '进化等级 × 0.005'
-        if(!options.ch)  f2 = 'level × 0.005'
+        let f2 = '进化等级 × 0.0075'
+        if(!options.ch)  f2 = 'level × 0.0075'
         return [f,f2];
     }, 
     calculateValue(A=player[this.layer].points) {
@@ -86,7 +86,7 @@ addLayer("a", {
         return val;
     },
     calculateValueA(A=player[this.layer].avolve.add(player[this.layer].avolve2)) {
-        let val = A.mul(0.005);
+        let val = A.mul(0.0075);
         return val;
     },
     update(diff) {

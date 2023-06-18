@@ -330,20 +330,21 @@ function loadVue() {
 
 	// data = id of clickable
 	Vue.component('clickable', {
-		props: ['layer', 'data', 'size'],
-		template:`
-		<button 
+		props: ['layer', 'data'],
+		template: `
+		<div 
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
-			v-bind:class="{ upg: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
-			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, size ? {'height': size, 'width': size} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="clickClickable(layer, data)"  @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="options.ch?tmp[layer].clickables[data].title:tmp[layer].clickables[data].titleEN"></h2><br></span>
-			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(options.ch?layers[layer].clickables[data].display:layers[layer].clickables[data].displayEN, layers[layer].clickables[data])"></span>
+			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick, metaClick: tmp[layer].clickables[data].metaClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
-            <tooltip v-if="tmp[layer].clickables[data].tooltip" :text="options.ch?tmp[layer].clickables[data].tooltip:tmp[layer].clickables[data].tooltipEN"></tooltip>
-		</button>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</div>
 		`,
-		data() { return { interval: false, time: 0,}},			
+		data() { return { interval: false, time: 0,}},
 		methods: {
 			start() {
 				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
@@ -351,7 +352,7 @@ function loadVue() {
 						let c = layers[this.layer].clickables[this.data]
 						if(this.time >= 5 && run(c.canClick, c)) {
 							run(c.onHold, c)
-						}
+						}	
 						this.time = this.time+1
 					}).bind(this), 20)}
 			},
@@ -434,6 +435,8 @@ function loadVue() {
 		<div v-if="tmp[layer].microtabs" :style="">
 			<div class="upgTable instant">
 				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" v-bind:style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
+				<div class="vl3"/>
+				<div class="vlBlock"/>
 			</div>
 			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
 

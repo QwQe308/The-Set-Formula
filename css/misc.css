@@ -10,21 +10,29 @@
 }
 
 .tabButton {
-	background-color: transparent;
-	color: var(--color);
-	font-size: 20px;
-	cursor: pointer;
-	padding: 5px 20px;
-	margin: 5px;
-	border-radius: 10px;
-	border: 2px solid;
-	color: var(--color);
+    background-color: transparent;
+    color: var(--color);
+    font-size: 25px;
+    padding: 8px 20px;
+    padding-bottom: 18px;
+    margin: 5px;
+    border: 3px solid;
+    border-bottom: hidden;
+    color: var(--color);
     transition: 0.4s;
+	transform: translateY(10px);
+    cursor: pointer;
+}
+
+.tabButton.AcSub {
+    background-color: #686868;
+	transform: translateY(0px);
 }
 
 .tabButton:hover {
-	transform: scale(1.1, 1.1);
+	transform: translateY(0px);
 	text-shadow: 0 0 7px var(--color);
+    z-index: -1;
 }
 
 .tooltip { 
@@ -38,7 +46,7 @@
     margin-bottom: 5px;
     transform: translateX(-50%);
     padding: 7px;
-	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console",cursive, monospace;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
@@ -71,12 +79,12 @@
 
 /* Horizontal/vertical lines */
 .vl {
-	border-left: 6px solid #ffffff;
+	border-left: 5px solid #ffffff;
 	height: 100%;
 	position: absolute;
 	left: 300px;
 	margin-left: -2px;
-	top: 0
+	top: 0;
 }
 
 .vl2 {
@@ -88,13 +96,31 @@
     z-index: -1;
 }
 
+.vl3 {
+	border-top: 3px solid #ffffff;
+    left: 0px;
+    width: calc(100% - 3px);
+    border-left: none;
+    position: absolute;
+    margin-top: 52px;
+}
+
+.vlBlock {
+    width: calc(100% - 20px);
+    height: 12px;
+    margin-top: 71px;
+    position: absolute;
+    background-color: #0F0F13;
+    transform: translateY(-2px);
+}
+
 .hl {
 	border-top: 3px solid var(--color);
 }
 
 /* Other */
 .digitalTime {
-	font-family: "Courier New", "Courier Prime", "Lucida Console", monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console",cursive, monospace;
     background-color:black;
     border: 4px solid #686868;
     color: red;
@@ -105,7 +131,10 @@
 
 .res {
     text-align: left;
-    left: 8px;
+    left: 308px;
     top: 0px;
-    position: absolute;
+    position: fixed;
+    z-index: 9;
+    pointer-events: none;
+    mix-blend-mode: difference;
 }

@@ -219,8 +219,10 @@ function load() {
 		getActiveClass('Language')
 		showTab('Language')
 	}else{
-		showTab('none')
+		getActiveClass(player.tab)
 	}
+
+	mouseSetting()
 }
 
 function loadOptions() {

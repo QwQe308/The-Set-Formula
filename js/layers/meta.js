@@ -1,26 +1,75 @@
 let brokenSet = {
     11:{
-        type(){return '[t]'},
-        name(){return 'log(t) → t'},
-        tooltip(){return '[t]<br>{log(t) → t}<br>t以对数的形式提升自身<br><br>效果:<br>扩张[BSt]于[t]<br>(BSt = log<sub>'+colorText(format(n(10).sub(this.effect()),2),'#00ff00')+'</sub>)'},
-        layer(){return n(1)},
+        tooltip(){
+            return this.type()+'<br><h1 style="font-weight: normal;font-size: 35px">{</h1>'+this.name()+'<h1 style="font-weight: normal;font-size: 35px">}</h1><br>'+this.effectDisplay()[0]+'<br><br>效果:<br>'+this.effectDisplay()[1]+'<br> '+colorText('( ','gainsboro')+this.formula()[0]+colorText(' )','gainsboro')+' <br> '+(this.formula()[1]!==null ? (colorText('( ','gainsboro')+this.formula()[1]+colorText(' )','gainsboro')) : '')
+        },
         effect(){
-            if(player.meta.potential11!==undefined && player.meta.potential11!==null){
-                return player.meta.potential11.add(1).log(10).sub(this.effectCorrective[0]()).mul(this.effectCorrective[1]())
-            }
-            return n(1)
+            return player.meta.potential[this.level()[0]][this.level()[1]].add(10).log(10).sub(1).sub(this.effectCorrective()[0]).mul(this.effectCorrective()[1])
+        },
+
+        level(){return [0,0]},
+        type(){return '[t]'},
+        name(){return ' <sup class="metaSup first">log(t) → t<sup> </sup></sup>'},
+        effectDisplay(){
+            return ['t以对数的形式提升自身','扩张[BSt]于[t]']
+        },
+        formulaEffect(){
+            return player.value.add(10).log(n(10).sub(this.effect()))
+        },
+        formula(){
+            return [
+                'BSt = log<sub>'+colorText(format(n(10).sub(this.effect())),'#00ff00')+'</sub>(t + 10)',
+                'BSt = '+format(this.formulaEffect())
+            ]
         },
         effectCorrective(){
-            return [1,0.076]
+            return [0,0.076]
         },
     },
     12:{
-        type(){return '[A-a]'},
-        name(){return 'gain<sup>^<sup>^</sup></sup>'},
-        tooltip(){return ''},
-        layer(){return n(1)},
+        tooltip(){
+            return this.type()+'<br><h1 style="font-weight: normal;font-size: 35px">{</h1>'+this.name()+'<h1 style="font-weight: normal;font-size: 35px">}</h1><br>'+this.effectDisplay()[0]+'<br><br>效果:<br>'+this.effectDisplay()[1]+'<br> '+colorText('( ','gainsboro')+this.formula()[0]+colorText(' )','gainsboro')+' <br> '+(this.formula()[1]!==null ? (colorText('( ','gainsboro')+this.formula()[1]+colorText(' )','gainsboro')) : '')
+        },
+        effect(){
+            return player.meta.potential[this.level()[0]][this.level()[1]].add(10).log(10).sub(1).sub(this.effectCorrective()[0]).mul(this.effectCorrective()[1])
+        },
 
+        level(){return [0,1]},
+        type(){return '[A-a]'},
+        name(){return ' gain<sup class="metaSup">^<sup class="metaSup">^ </sup></sup>'},
+        effectDisplay(){
+            return ['指数提升a的获取指数','扩张[BSa^]于[a]']
+        },
+        level(){return [0,0]},
+        formulaEffect(){
+            return n(this.effect()).pow(0.2).add(1)
+        },
+        formula(){
+            return [
+                'BSa^ = '+colorText(n(this.effect()),'#00ff00')+'<sup>0.2</sup> + 1',
+                'BSa^ = '+format(this.formulaEffect())
+            ]
+        },
+        effectCorrective(){
+            return [0,0.01]
+        },
     },
+}
+
+function brokenSetAble(){
+    for(i in brokenSet){
+        let name = '<br><span class="metaName">'+brokenSet[i]['type']()+'</span><br><h1 style="font-weight: normal;font-size: 35px">{</h1><span class="metaTooltip">'+brokenSet[i]['name']()+'</span><h1 style="font-weight: normal;font-size: 35px">}</h1>'
+
+        brokenSet[i].display = name
+        brokenSet[i].metaClick = true
+        
+    }
+    let set = brokenSet
+    return set
+}
+
+function brokenWorldEffect(){
+    return '<br>暂无效果生效'
 }
 
 addLayer("meta", {
@@ -41,12 +90,11 @@ addLayer("meta", {
         mirrorGain: n(0),
         
         breakLevel: n(0),
-        breakTotal: n(0),
         goals: n(0),
 
+        potential: [[n(0),n(0)]],
+
         scores: n(0),
-        
-        brokenSetUnlockOrder:[]//你 自 己 存 解 锁 顺 序
     }},
     tooltip() {
         return false
@@ -473,20 +521,20 @@ addLayer("meta", {
             unlocks(){return n(876)},
             unlocked(){return player.meta.levelTotal.gte(876)},
         },
-    },/*
+    },
 	challenges: {
 		11: {
 			name: "破碎集合",
 			challengeDescription(){
-			  return '进入破碎集合后你将以下效果开始挑战<br><br>重置:重置主树,元破碎,保留侧边层,压缩点数,集合公式<br><br>变化:所有非自动化荣耀无效,以50倍t增长开始挑战<br><br>扩展:<br>在每层你需要选择2次公式并将其无效<br>在完成目标后你可以进入下层或继续完成目标<br>根据目标完成次数你可以选择解锁并增加对应集合公式的潜力值<br>进入下层/退出挑战时你将保留最后选择的集合公式<br><br>目标: '+formatWhole(0)+' / '+formatWhole(this.nextLayer())+'<br><br>效果:<br><br><br><-目标里程-><br>'+(inChallenge('meta',11) ? '' : '需先进入破碎集合')
+			  return '进入破碎世界<br><br>重置:重置先前的所有与凌片<br><br>变化:'+brokenWorldEffect()+'<br><br>扩展:<br>完成目标后你可以进入下一层并选择增加一个集合公式的潜力值并解锁<br>潜力值获取根据完成的目标数量增加<br>在扩展中获得的集合公式效果增加百倍,退出时失效<br><br>目标: '+formatWhole(player.meta.goals)+' / '+formatWhole(this.nextLayer())
 			},
 			unlocked(){return player.meta.tower.gte(1)},
 			nextLayer(){return n(5)},
 			canComplete: function() {return false},
-            style(){return 'border-radius:5px;width: 580px;height: 650px;background: #fff;color: rgb(54, 54, 54)'},
+            style(){return 'border-radius:5px;width: 650px;height: 650px;background: #fff;color: rgb(54, 54, 54)'},
 		},
-	},*/
-    clickables:brokenSet,//靠你了 我不清楚你怎么想的 你应该是想要for循环处理这个东西吧
+	},
+    clickables:brokenSetAble(),
 	microtabs:{
         "主要":{
 			"回切任务":{
@@ -546,6 +594,35 @@ addLayer("meta", {
 				]
 			},
 		},
+        "破碎":{
+            "破碎集合":{
+                buttonStyle(){return{'border-color': '#aaa'}},
+                unlocked(){return player.meta.tower.gte(1)},
+                content:[
+                    ["blank", "100px"],
+                    'challenges',
+                    ["blank", "100px"],
+                ]
+            },
+            "集合公式":{
+                buttonStyle(){return{'border-color': '#aaa'}},
+                unlocked(){return player.meta.tower.gte(1)},
+                content:[
+                    ["blank", "100px"],
+                    'clickables',
+                    ["blank", "100px"],
+                ]
+            },
+            "破碎凌片":{
+                buttonStyle(){return{'border-color': '#aaa'}},
+                unlocked(){return player.meta.tower.gte(1)},
+                content:[
+                    ["blank", "100px"],
+                    'clickables',
+                    ["blank", "100px"],
+                ]
+            },
+		},
         "监视器":{
 			"集合世界":{
                 buttonStyle(){return{'border-color': '#aaa'}},
@@ -584,25 +661,6 @@ addLayer("meta", {
 				]
 			},
         },
-        "破碎":{
-            "破碎集合":{
-                buttonStyle(){return{'border-color': '#aaa'}},
-                unlocked(){return player.meta.tower.gte(1)},
-                content:[
-                    'challenges',
-                    ["blank", "100px"],
-                ]
-            },
-            "集合公式":{
-                buttonStyle(){return{'border-color': '#aaa'}},
-                unlocked(){return player.meta.tower.gte(1)},
-                content(){
-                    let formats = []
-                    for(i in player.meta.brokenSetUnlockOrder) formats.push(["clickable",player.meta.brokenSetUnlockOrder[i]])
-                    return formats
-                }
-            },
-		},
     },
     displayFormula() {
         let f = "0";
@@ -640,7 +698,7 @@ addLayer("meta", {
         ["blank", "25px"],
         ["microtabs", "主要"],
     ],
-    layerShown() { return tmp.goals.unlocks>=8},
+    layerShown() { return tmp.goals.unlocks>=8 || true},
     componentStyles: {
         achievement: {
             "border-radius": "5%",

@@ -77,15 +77,15 @@ addLayer("a2", {
             f = "α + 1";
         }
 
-        let f2 = colorText('( ','#bf8f8f')+' β + 1 '+colorText(' )<sup>α / 20 + 0.7</sup','#bf8f8f')
+        let f2 = colorText('( ',1)+' β + 1 '+colorText(' )<sup>α / 20 + 0.7</sup',1)
 
         let f3 = '1 - α × 0.24'
-        if(tmp.ac.unlocks>=1){f3 = colorText('Max( ','#bf8f8f')+'1 - α × 0.24, 0.02'+colorText(' ) ','#bf8f8f')}
+        if(tmp.ac.unlocks>=1){f3 = colorText('Max( ',1)+'1 - α × 0.24, 0.04'+colorText(' ) ',1)}
         if(tmp.ac.unlocks>=6){f3 = '| 1 - α × 0.24 |'}
 
         let roc = player.ro.c.gt(0) ? '<sup>RC</sup>' : ''
         let g6 = tmp.goals.unlocks>=6 ? ' + B<sub>01</sub> / 222.22' : ''
-        let fg = colorText('γ'+roc+' × 0.2 × (','#77bf5f')+colorText(' Max( ','#bf8f8f')+'γ'+roc+', 1'+colorText(' ) / ( ','#bf8f8f')+' 2 + γ '+colorText(' ) ','#bf8f8f')+' '+colorText(') + 1'+g6,'#77bf5f')
+        let fg = colorText('γ'+roc+' × 0.2 × (','#77bf5f')+colorText(' Max( ',1)+'γ'+roc+', 1'+colorText(' ) / ( ',1)+' 2 + γ '+colorText(' ) ',1)+' '+colorText(') + 1'+g6,'#77bf5f')
         
         return [f, f2, f3, fg];
     },
@@ -127,8 +127,8 @@ addLayer("a2", {
     },
 	clickables: {
 		11: {
-			title:"-",
-			titleEN:"-",
+			display:"<h2>-</h2>",
+			displayEN:"<h2>-</h2>",
 			canClick(){
 				return player.a2.beta.gte(1)
 			},
@@ -140,8 +140,8 @@ addLayer("a2", {
             unlocked(){return tmp.ac.unlocks<=3},
 		},
 		12: {
-			title:"+",
-			titleEN:"+",
+			display:"<h2>+</h2>",
+			displayEN:"<h2>+</h2>",
 			canClick(){
 				return player.a2.points.sub(player.a2.beta).gte(1)
 			},
