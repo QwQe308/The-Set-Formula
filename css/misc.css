@@ -99,7 +99,7 @@
 .vl3 {
 	border-top: 3px solid #ffffff;
     left: 0px;
-    width: calc(100% - 3px);
+    width: calc(100%);
     border-left: none;
     position: absolute;
     margin-top: 52px;
@@ -130,6 +130,7 @@
 }
 
 .res {
+    font-size: 17px;
     text-align: left;
     left: 308px;
     top: 0px;

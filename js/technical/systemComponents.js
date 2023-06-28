@@ -213,7 +213,7 @@ var systemComponents = {
         <h2>其它页面:</h2><br><br>
 		<div style="border: 3px solid #888; width:300px; height:30px; margin-top: 8px; padding:15px; border-radius: 5px; display: inline-table">
 			<h3>我(辉影神秘)的Discord:</h3><br>
-			<a class="link" href="https://discord.gg/UDAmqZYAeH" target="_blank">点击跳转</a><br>
+			<a class="link" href="https://discord.gg/DTJYvatRQA" target="_blank">点击跳转</a><br>
 			<h6 style="color:#aaa">(快点来,非常好玩)</h6>
 		</div>
 		<div style="border: 3px solid #888; width:300px; height:30px; margin-top: 8px; padding:15px; border-radius: 5px; display: inline-table">

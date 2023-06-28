@@ -8,7 +8,7 @@
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	text-align: left;
 	font-size: 38px;
-	font-family: "Courier New", "Courier Prime", "Lucida Console", "A",cursive, monospace;
+	font-family: "Courier New", "Courier Prime", "Lucida Console",cursive, monospace;
 	font-weight: bold;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);

@@ -41,18 +41,18 @@ addLayer("ro", {
         return n(1)
     },
     displayFormula(){
-        let f = 'b × 1.5'
+        let f = 'b × 2'
 
         let f2 = 'RoA<sup>0.75</sup> + 1'
 
         let f3 = 'RoB / 50'
 
-        let f4 = colorText('( ','#77bf5f')+colorText('log<sub>100</sub>(',1)+' RoC + 100 '+colorText(' ) ',1)+colorText(')<sup>0.3</sup> ','#77bf5f')
+        let f4 = 'log<sub>100</sub><sup>0.3</sup>( RoC + 100 ) '
 
         return [f,f2,f3,f4]
     },
     calculateValue(val=player.b.value) {
-        return val.mul(1.5);
+        return val.mul(2);
     },
     calculateValueRo(){
         let f = player.ro.a.pow(0.75).add(1)
@@ -114,7 +114,7 @@ addLayer("ro", {
         if(player.meta.buyables[21].gte(15)){
             player.ro.autoSpinTimer = player.ro.autoSpinTimer.add(diff)
             let amount = player.ro.autoSpinTimer.div(getAutoSpinInterval()).floor()//轮盘次数
-            player.ro.autoSpinTimer = player.ro.autoSpinTimer.sub()//自动化时间消耗
+            player.ro.autoSpinTimer = player.ro.autoSpinTimer.sub(amount.mul(getAutoSpinInterval()))//自动化时间消耗
             let bulk = n(1)//批量轮盘倍率
             if(amount.gte(10)){//最多10次,多余的转为批量倍率
                 bulk = amount.div(10)
@@ -150,85 +150,78 @@ addLayer("ro", {
                 let lastB = n(0)
                 let lastC = n(0)
 
-                let maxT = 1
-                if((player.ro.points.gte(tmp.ro.roReq.mul(2)) && player.meta.buyables[21].gte(15)) || player.meta.buyables[21].lt(15)){
-                    for(let i = 1;i<=maxT;i++){
-                        if(player.ro.points.lt(tmp.ro.roReq.mul(2))){break}
-                        if(player.ro.points.lt(bulk)){bulk = player.ro.points.div(tmp.ro.roReq.mul(2))}
-                        if(tmp.ac.unlocks>=6){maxT = 5}
-                        let pow = tmp.ro.roLevel>=2 ? n(Math.random() * 3 - 1) : n(Math.random() * 2 - 1)
-                        let num = n(10).pow(pow)
-        
-                        let a = (Math.random() * 100)
+                if((player.ro.points.gte(tmp.ro.roReq) && player.meta.buyables[21].gte(15)) || player.meta.buyables[21].lt(15)){
+                    if(player.ro.points.lt(bulk)){bulk = player.ro.points.div(tmp.ro.roReq).sub(1).max(1)}
+                    let pow = tmp.ro.roLevel>=2 ? n(Math.random() * 3 - 1) : n(Math.random() * 2 - 1)
+                    let num = n(10).pow(pow)
 
-                        num = num.mul(bulk)//批量倍率
+                    let a = (Math.random() * 100)
 
-                        if(tmp.ro.roLevel>=2){
-                            if(a>=90){
-                                if(player.meta.buyables[22].gte(6)){
-                                    player.ro.c = player.ro.c.add(num)
-                                    player.ro.cPower = player.ro.cPower.add(num)
-                                }else if(player.b.powerData){
-                                    player.ro.cPower = player.ro.cPower.add(num)
-                                }else{
-                                    player.ro.c = player.ro.c.add(num)
-                                }
-            
-                                lastC = lastC.add(num)
-                            }else if(a>=70){
-                                if(player.meta.buyables[22].gte(6)){
-                                    player.ro.b = player.ro.b.add(num)
-                                    player.ro.bPower = player.ro.bPower.add(num)
-                                }else if(player.b.powerData){
-                                    player.ro.bPower = player.ro.bPower.add(num)
-                                }else{
-                                    player.ro.b = player.ro.b.add(num)
-                                }
-            
-                                lastB = lastB.add(num)
+                    num = num.mul(bulk)
+
+                    if(tmp.ro.roLevel>=2){
+                        if(a>=90){
+                            if(player.meta.buyables[22].gte(6)){
+                                player.ro.c = player.ro.c.add(num)
+                                player.ro.cPower = player.ro.cPower.add(num)
+                            }else if(player.b.powerData){
+                                player.ro.cPower = player.ro.cPower.add(num)
                             }else{
-                                if(player.meta.buyables[22].gte(6)){
-                                    player.ro.a = player.ro.a.add(num)
-                                    player.ro.aPower = player.ro.aPower.add(num)
-                                }else if(player.b.powerData){
-                                    player.ro.aPower = player.ro.aPower.add(num)
-                                }else{
-                                    player.ro.a = player.ro.a.add(num)
-                                }
-            
-                                lastA = lastA.add(num)
+                                player.ro.c = player.ro.c.add(num)
                             }
+
+                            lastC = lastC.add(num)
+                        }else if(a>=70){
+                            if(player.meta.buyables[22].gte(6)){
+                                player.ro.b = player.ro.b.add(num)
+                                player.ro.bPower = player.ro.bPower.add(num)
+                            }else if(player.b.powerData){
+                                player.ro.bPower = player.ro.bPower.add(num)
+                            }else{
+                                player.ro.b = player.ro.b.add(num)
+                            }
+
+                            lastB = lastB.add(num)
                         }else{
-                            if(a>=90){
-                                if(player.meta.buyables[22].gte(6)){
-                                    player.ro.b = player.ro.b.add(num)
-                                    player.ro.bPower = player.ro.bPower.add(num)
-                                }else if(player.b.powerData){
-                                    player.ro.bPower = player.ro.bPower.add(num)
-                                }else{
-                                    player.ro.b = player.ro.b.add(num)
-                                }
-        
-                                lastB = lastB.add(num)
+                            if(player.meta.buyables[22].gte(6)){
+                                player.ro.a = player.ro.a.add(num)
+                                player.ro.aPower = player.ro.aPower.add(num)
+                            }else if(player.b.powerData){
+                                player.ro.aPower = player.ro.aPower.add(num)
                             }else{
-                                if(player.meta.buyables[22].gte(6)){
-                                    player.ro.a = player.ro.a.add(num)
-                                    player.ro.aPower = player.ro.aPower.add(num)
-                                }else if(player.b.powerData){
-                                    player.ro.aPower = player.ro.aPower.add(num)
-                                }else{
-                                    player.ro.a = player.ro.a.add(num)
-                                }
-        
-                                lastA = lastA.add(num)
+                                player.ro.a = player.ro.a.add(num)
                             }
+
+                            lastA = lastA.add(num)
+                        }
+                    }else{
+                        if(a>=90){
+                            if(player.meta.buyables[22].gte(6)){
+                                player.ro.b = player.ro.b.add(num)
+                                player.ro.bPower = player.ro.bPower.add(num)
+                            }else if(player.b.powerData){
+                                player.ro.bPower = player.ro.bPower.add(num)
+                            }else{
+                                player.ro.b = player.ro.b.add(num)
+                            }
+        
+                            lastB = lastB.add(num)
+                        }else{
+                            if(player.meta.buyables[22].gte(6)){
+                                player.ro.a = player.ro.a.add(num)
+                                player.ro.aPower = player.ro.aPower.add(num)
+                            }else if(player.b.powerData){
+                                player.ro.aPower = player.ro.aPower.add(num)
+                            }else{
+                                player.ro.a = player.ro.a.add(num)
+                            }
+
+                            lastA = lastA.add(num)
                         }
                     }
-
-                    player.ro.last = (lastA.gt(0) ? format(lastA)+' RoA ' : '') + (lastB.gt(0) ? format(lastB)+' RoB ' : '') + (lastC.gt(0) ? format(lastC)+' RoC ' : '')
-                    player.ro.points = player.ro.points.sub(tmp.ro.roReq.mul(bulk)).max(0)
                 }
-
+                player.ro.last = (lastA.gt(0) ? format(lastA)+' RoA ' : '') + (lastB.gt(0) ? format(lastB)+' RoB ' : '') + (lastC.gt(0) ? format(lastC)+' RoC ' : '')
+                player.ro.points = player.ro.points.sub(tmp.ro.roReq.mul(bulk)).max(0)
 			},
 			style() {return {'height': "270px", 'min-height': "270px", 'width': '270px',"border-radius": "50%","border-color": tmp.ro.roLevel>=2 ? 'yellow' : ''}},
             onHold(){return this.onClick()},
@@ -329,34 +322,34 @@ addLayer("ro", {
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RA("+format(player[this.layer].a)+") | RA<sub>p</sub>("+format(player[this.layer].aPower)+") = "+format(player[this.layer].valueA)+" | "+format(player[this.layer].valueAPower)+"</h3>"
+                return "<h3>RA("+format(player[this.layer].a)+") ‖ RA<sub>p</sub>("+format(player[this.layer].aPower)+") = "+format(player[this.layer].valueA)+" ‖ "+format(player[this.layer].valueAPower)+"</h3>"
             }
             return "<h3>RA("+format(player[this.layer].a)+") = "+format(player[this.layer].valueA)+"</h3>"
         }],
-        ["display-text", function() { return (tmp.goals.unlocks>=6 ? 'RA | RA<sub>p</sub>' : 'RA')+"(RoA) = "+tmp[this.layer].displayFormula[1] }],
+        ["display-text", function() { return (tmp.goals.unlocks>=6 ? 'RA‖RA<sub>p</sub>' : 'RA')+"(RoA) = "+tmp[this.layer].displayFormula[1] }],
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RB("+format(player[this.layer].b)+") | RB<sub>p</sub>("+format(player[this.layer].bPower)+") = "+format(player[this.layer].valueB)+" | "+format(player[this.layer].valueBPower)+"</h3>"
+                return "<h3>RB("+format(player[this.layer].b)+") ‖ RB<sub>p</sub>("+format(player[this.layer].bPower)+") = "+format(player[this.layer].valueB)+" ‖ "+format(player[this.layer].valueBPower)+"</h3>"
             }
             return "<h3>RB("+format(player[this.layer].b)+") = "+format(player[this.layer].valueB)+"</h3>"
         }],
-        ["display-text", function() { return (tmp.goals.unlocks>=6 ? 'RB | RB<sub>p</sub>' : 'RB')+"(RoB) = "+tmp[this.layer].displayFormula[2] }],
+        ["display-text", function() { return (tmp.goals.unlocks>=6 ? 'RB‖RB<sub>p</sub>' : 'RB')+"(RoB) = "+tmp[this.layer].displayFormula[2] }],
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RC("+format(player[this.layer].c)+") | RC<sub>p</sub>("+format(player[this.layer].cPower)+") = "+format(player[this.layer].valueC)+" | "+format(player[this.layer].valueCPower)+"</h3>"
+                return "<h3>RC("+format(player[this.layer].c)+") ‖ RC<sub>p</sub>("+format(player[this.layer].cPower)+") = "+format(player[this.layer].valueC)+" ‖ "+format(player[this.layer].valueCPower)+"</h3>"
             }
             return tmp.ro.roLevel>=2 ? "<h3>RC("+format(player[this.layer].c)+") = "+format(player[this.layer].valueC)+"</h3>" : ''
         }],
-        ["display-text", function() { return tmp.ro.roLevel>=2 ? (tmp.goals.unlocks>=6 ? 'RC | RC<sub>p</sub>' : 'RC')+"(RoC) = "+tmp[this.layer].displayFormula[3] : '' }],
+        ["display-text", function() { return tmp.ro.roLevel>=2 ? (tmp.goals.unlocks>=6 ? 'RC‖RC<sub>p</sub>' : 'RC')+"(RoC) = "+tmp[this.layer].displayFormula[3] : '' }],
         "blank",
         ["display-text", function() {
             let a = '你可以长按去转动轮盘<br><br>'
-            if(player.ro.valueA.gt(0)){a += 'RA 将会提升 n 中 t 因子的指数<br>'}
-            if(player.ro.valueB.gt(0)){a += 'RB 将会提升 a 的指数<br>'}
-            if(player.ro.valueC.gt(0)){a += 'RC 将会提升 n 中 的指数<br>'}
-            if(player.ro.valueAPower.gt(0) || player.ro.valueBPower.gt(0) || player.ro.valueCPower.gt(0)){a += '所有加了 <sub>p</sub> 的轮盘资源都会以不同方式提升电池<br>'}
+            if(player.ro.a.gt(0)){a += 'RA 将会提升 n 中 t 因子的指数<br>'}
+            if(player.ro.b.gt(0)){a += 'RB 将会提升 a 的指数<br>'}
+            if(player.ro.c.gt(0)){a += 'RC 将会提升 n 中 的指数<br>'}
+            if(player.ro.aPower.gt(0) || player.ro.bPower.gt(0) || player.ro.cPower.gt(0)){a += '所有加了 <sub>p</sub> 的轮盘资源都会以不同方式提升电池<br>'}
             return '<i style="color:#aaa">'+a+'</i>'
         }],
     ],

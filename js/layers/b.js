@@ -35,8 +35,8 @@ addLayer("b", {
     costScalingStart: new Decimal(15),
     costScalingInc() { return new Decimal(0.0317).sub(player.meta.buyables[32].gte(10) ? player.meta.buyables[32].mul(0.001) : n(0)).max(0) },
     canBuyMax() { return tmp.ac.unlocks>=4 },
-    autoPrestige() { return player.meta.buyables[23].gte(55) },
-    resetsNothing() { return player.meta.buyables[23].gte(55) },
+    autoPrestige() { return player.meta.buyables[23].gte(32) },
+    resetsNothing() { return player.meta.buyables[23].gte(32) },
     tooltip(){
         return false
     },
@@ -79,14 +79,20 @@ addLayer("b", {
         "main-display",
         "prestige-button",
         ["display-text", function() {
-            if(options.ch) return (player[this.layer].points.gte(tmp[this.layer].costScalingStart))?("在 "+formatWhole(tmp[this.layer].costScalingStart)+" B能量之后,每一个B能量都会使它的需求指数升高"+format(tmp[this.layer].costScalingInc)):"" 
-            return (player[this.layer].points.gte(tmp[this.layer].costScalingStart))?("After "+formatWhole(tmp[this.layer].costScalingStart)+" B-Power, each B-Power increases its requirement exponent by "+format(tmp[this.layer].costScalingInc)):"" 
+            if(options.ch) return (player[this.layer].points.gte(tmp[this.layer].costScalingStart) && (tmp[this.layer].costScalingInc).gt(0))?("在 "+formatWhole(tmp[this.layer].costScalingStart)+" B能量之后,每一个B能量都会使它的需求指数升高"+format(tmp[this.layer].costScalingInc)):"" 
+            return (player[this.layer].points.gte(tmp[this.layer].costScalingStart) && (tmp[this.layer].costScalingInc).gt(0))?("After "+formatWhole(tmp[this.layer].costScalingStart)+" B-Power, each B-Power increases its requirement exponent by "+format(tmp[this.layer].costScalingInc)):"" 
         }],
         "blank",
         ["display-text", function() { return "<h3>b("+formatWhole(player[this.layer].points)+") = "+format(player[this.layer].value)+"</h3>" }],
         ["display-text", function() { return "b(B) = "+tmp[this.layer].displayFormula }],
         "blank", "blank",
         ['row',[["clickable", 11], ["bar", "Power"], ]],
+        "blank","blank",
+        ["display-text", function() {
+            let a = ''
+            if(player.b.power.gt(0)){a += '关闭电池以获得RoA,RoB,RoC而不是RoA<sub>p</sub>,RoB<sub>p</sub>,RoC<sub>p</sub><br>'}
+            return '<i style="color:#aaa">'+a+'</i>'
+        }],
     ],
     displayFormula() {
         let p = tmp.ac.unlocks>=6 ? '<sup>2</sup>' : ''
@@ -99,7 +105,7 @@ addLayer("b", {
             f = '20'
         }
 
-        let f2 = colorText('( ','#77bf5f')+colorText('( ',1)+"t<sub>2</sub> + RA<sub>p</sub>"+colorText(' ) × RB<sub>p</sub> × b',1)+colorText(' )<sup>RC<sub>p</sub></sup>','#77bf5f')
+        let f2 = colorText('( ',1)+'( t<sub>2</sub> + RA<sub>p</sub> ) × RB<sub>p</sub> × b'+colorText(' )<sup>RC<sub>p</sub></sup>',1)
         return [f,f2];
     },
     calculateValue(B=player[this.layer].points) {

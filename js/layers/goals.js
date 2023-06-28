@@ -261,8 +261,8 @@ let goalAchData = {
         name: "我猜那个不再是没用的了...",
         nameEN: "I guess this isn't useless now...",
         done() { return player.b.power.gte(1) },
-        tooltip: "B<sub>01</sub> ≥ 1<br>提示:<br>关闭电池以获得RoA,RoB,RoC<br>而不是RoA<sub>p</sub>,RoB<sub>p</sub>,RoC<sub>p</sub>",
-        tooltipEN: "B<sub>01</sub> ≥ 1<br>Tip:<br>Turn off the battery to get RoA,RoB,RoC<br>Instead of RoA<sub>p</sub>,RoB<sub>p</sub>,RoC<sub>p</sub>",
+        tooltip: "B<sub>01</sub> ≥ 1",
+        tooltipEN: "B<sub>01</sub> ≥ 1",
         unlocked() { return tmp.goals.unlocks>=6 },
     },
     63: {
@@ -494,7 +494,7 @@ addLayer("goals", {
     tooltip() {
         return false
     },
-    color: "#cbff3b",
+    color: "#ddff44",
     tabFormat: [
         ["display-text", function() { return getPointsDisplay() }],
         ["display-text", function() {

@@ -20,7 +20,7 @@ addLayer("a2", {
         //tmpValues
         autoGainTimer:n(0)
     }},
-    color: "#f8a9ba",
+    color: "rgb(255,198,210)",
     resource: "阿尔法能量", 
     resourceEN: "Alpha Energy", 
     baseResource: "n", 
@@ -69,7 +69,7 @@ addLayer("a2", {
         text += n(tmp[this.layer].getResetGain).add(player.a2.points).gte(300) ? 'You cannot get more Alpha Energy' : "Req: a(A) ≥ "+format(tmp[this.layer].getNextAt)
         return text;
     },
-    row: 1, // Row the layer is in on the tree (0 is the first row)
+    row: 1,
     layerShown(){return tmp.goals.unlocks>=1},
     displayFormula() {
         let f = "α - β + 1";
@@ -77,7 +77,7 @@ addLayer("a2", {
             f = "α + 1";
         }
 
-        let f2 = colorText('( ',1)+' β + 1 '+colorText(' )<sup>α / 20 + 0.7</sup',1)
+        let f2 = '(  β + 1  )<sup>α / 20 + 0.7</sup'
 
         let f3 = '1 - α × 0.24'
         if(tmp.ac.unlocks>=1){f3 = colorText('Max( ',1)+'1 - α × 0.24, 0.04'+colorText(' ) ',1)}
@@ -85,7 +85,7 @@ addLayer("a2", {
 
         let roc = player.ro.c.gt(0) ? '<sup>RC</sup>' : ''
         let g6 = tmp.goals.unlocks>=6 ? ' + B<sub>01</sub> / 222.22' : ''
-        let fg = colorText('γ'+roc+' × 0.2 × (','#77bf5f')+colorText(' Max( ',1)+'γ'+roc+', 1'+colorText(' ) / ( ',1)+' 2 + γ '+colorText(' ) ',1)+' '+colorText(') + 1'+g6,'#77bf5f')
+        let fg = colorText('γ'+roc+' × 0.2 × (',1)+' Max( '+maxText([player.a2.gamma.pow(player.ro.valueC),1], 'max', ['γ'+roc,'1'])+' ) / (  2 + γ  ) '+colorText(') + 1'+g6,1)
         
         return [f, f2, f3, fg];
     },
@@ -161,10 +161,10 @@ addLayer("a2", {
         "blank",
         ["display-text", function() {
             if(player.a2.gamma.gte(1)){
-                return "<h3>α/β/γ = "+format(player[this.layer].points,0)+'/'+format(player[this.layer].beta,0)+'/'+format(player[this.layer].gamma,0)+'</h3>'
+                return "<h3>α ‖ β ‖ γ = "+format(player[this.layer].points,0)+' ‖ '+format(player[this.layer].beta,0)+' ‖ '+format(player[this.layer].gamma,0)+'</h3>'
             }
             if(player[this.layer].unlocked){
-                return "<h3>α/β = "+format(player[this.layer].points,0)+'/'+format(player[this.layer].beta,0)+'</h3>'
+                return "<h3>α ‖ β = "+format(player[this.layer].points,0)+' ‖ '+format(player[this.layer].beta,0)+'</h3>'
             }
         }],,
         "blank",
@@ -182,7 +182,13 @@ addLayer("a2", {
         "blank",
         "blank",
         "blank",
-        'clickables'
+        'clickables',
+        "blank",
+        ["display-text", function() {
+            let a = ''
+            if(player.a2.gamma.gt(0)){a += 'γ数量同等于进化要求除数等级<br>'}
+            return '<i style="color:#aaa">'+a+'</i>'
+        }],
     ],
     componentStyles: {
         buyable: {

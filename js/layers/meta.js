@@ -107,6 +107,7 @@ addLayer("meta", {
             width: 400,
             height: 10,
             progress() {return player.meta.exp.div(player.meta.levelCost)},
+            fillStyle: {"font-size":" 16px;"},
         },
         echeprogress2: {
             direction: RIGHT,
@@ -118,10 +119,10 @@ addLayer("meta", {
     update(diff) {
         player.meta.towerCost = n(10).pow(player.meta.tower.add(1)).mul(15).pow(1.3786).floor()
 
-        let base = n(100).add(player.meta.level.sub(100).max(0)).add(player.meta.levelTotal.sub(200).mul(50).max(0))
-        player.meta.levelCost = base.min(1000).add(base.sub(1000).max(0).root(2))
-        if(player.meta.levelTotal.gte(950)){player.meta.levelCost = base}
-        if(player.meta.levelTotal.gte(975)){player.meta.levelCost = base.pow(1.3)}
+        let base = n(100)//.add(player.meta.level.sub(100).max(0)).add(player.meta.levelTotal.sub(200).mul(50).max(0))
+        player.meta.levelCost = base//.min(1000).add(base.sub(1000).max(0).root(2))
+        //if(player.meta.levelTotal.gte(950)){player.meta.levelCost = base}
+        //if(player.meta.levelTotal.gte(975)){player.meta.levelCost = base.pow(1.3)}
 
         if(player.meta.level.gte(player.meta.towerCost)){
             player.meta.level = player.meta.level.sub(player.meta.towerCost)
@@ -182,7 +183,7 @@ addLayer("meta", {
                 return '基础构建'+(player.meta.levelTotal.gte(1) ? 'I<br>' : '<br>');
             },
             display(){
-                return '下一个: '+format(this.cost())+' n<sub>s</n><br>(+'+format(n(this.gain()))+'%)'
+                return '下一个: '+format(this.cost())+' n<sub>s</sub><br>(+'+format(n(this.gain()))+'%)'
             },
             gain(x=player[this.layer].buyables[this.id]){
                 return n(10)
@@ -192,7 +193,7 @@ addLayer("meta", {
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                return n(30000).pow(n(1).add(x.mul(0.008))).pow(tmp.meta.buyables[41].effectCount[0])
+                return n(100000).pow(n(2).pow(x.div(1000)).add(x.root(1.08).mul(0.004))).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.superValue.gte(this.cost())},
 			style() {return {'width': "170px", "min-width": "100px", 'height': "170px",}},
@@ -206,22 +207,14 @@ addLayer("meta", {
                 return '下一个: '+format(this.cost())+' a<br>(+'+format(n(this.gain()))+'%)'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(20).add(x.pow(5).root(2)).root(2).min(n(25).add(x.max(1).pow(5).root(2).max(1).log(10).max(1))).mul(0.5)
+                return n(20).add(x).root(2).mul(2)
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                let pow = n(1)
-                let pow2 = n(1)
-                let pow3 = n(1)
-                let pow4 = n(1)
-                if(n('1e1000').pow(n(1).add(x.pow(2)).root(8)).gte('1e2500')){pow = n(n(x).mul(0.003).add(1))}
-                if(n('1e1000').pow(n(1).add(x.pow(2)).root(8)).pow(pow).gte('1e25000')){pow2 = n(n(x).mul(0.00009).add(1))}
-                if(n('1e1000').pow(n(1).add(x.pow(2)).root(8)).pow(pow).pow(pow2).gte('1e30000')){pow3 = n(1.1)}
-                if(n('1e1000').pow(n(1).add(x.pow(2)).root(8)).pow(pow).pow(pow2).pow(pow3).gte('1e70000')){pow4 = n(x.pow(0.1))}
-                return n('1e1000').pow(n(1).add(x.pow(2)).root(8)).pow(pow).pow(pow2).pow(pow3).pow(pow4).pow(tmp.meta.buyables[41].effectCount[0])
+                return n('1e3000').pow(x.pow(2.5).add(n(1.2).pow(x)).root(10)).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.a.value.gte(this.cost())},
 			style() {return {'width': "170px", "min-width": "100px", 'height': "170px",}},
@@ -236,15 +229,15 @@ addLayer("meta", {
                 return '下一个: '+format(this.cost())+' α<br>(+'+format(n(this.gain()))+'%)'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(0.01).add(x.pow(1.075).mul(0.01)).min(25)
+                return x.mul(5).add(25).sqrt()
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                let base = n(x).mul(x).root(1.5).add(1)
-                return base.mul(base.sub(22222).max(0).div(100).max(1)).pow(tmp.meta.buyables[41].effectCount[0])
+                let base = x.mul(5).add(100).pow(1.45).mul(n(1.02).pow(x.root(1.33)))
+                return base.pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.a2.points.gte(this.cost())},
 			style() {return {'width': "170px", "min-width": "100px", 'height': "170px",}},
@@ -259,20 +252,14 @@ addLayer("meta", {
                 return '下一个: '+format(this.cost())+' power<br>(+'+format(n(this.gain()))+'%)'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(2.5).add(x.max(1).log(2).max(1))
+                return n(2.5).add(x.add(1).log(2).add(1).pow(1.6))
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                let pow = n(5)
-                if(n(x).add(1).pow(5).gte(1e12)){pow = n(5).add(x.max(1).log(10).max(1).div(15))}
-                if(n(x).add(1).pow(pow).gte(5e17)){pow = n(5).add(x.max(1).log(8).max(1).div(15))}
-                if(n(x).add(1).pow(pow).gte(3e18)){pow = n(5).add(x.max(1).log(6).max(1).div(15))}
-                if(n(x).add(1).pow(pow).gte(8e18)){pow = n(5).add(x.max(1).log(3).max(1).div(15))}
-                if(n(x).add(1).pow(pow).gte(7e19)){pow = n(5).add(x.max(1).log(1.5).max(1).div(15))}
-                return n(x).add(1).pow(pow).pow(tmp.meta.buyables[41].effectCount[0])
+                return n(x).add(100).pow(x.add(50).log(2)).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.b.powerValue.gte(this.cost())},
 			style() {return {'width': "170px", "min-width": "100px", 'height': "170px",}},
@@ -296,14 +283,14 @@ addLayer("meta", {
                 return '当前构建无效果,将在 '+formatWhole(n(15).sub(player[this.layer].buyables[this.id]))+' 进阶构建I后产生'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(5)
+                return n(10).add(x.mul(10))
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                return n(x).mul(2).add(1).pow(2).pow(tmp.meta.buyables[41].effectCount[0])
+                return n(x).pow(2).add(160).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return n(this.count()).gte(this.cost())},
 			style() {return {'width': "226px", "min-width": "100px", 'height': "226px",}},
@@ -324,19 +311,19 @@ addLayer("meta", {
                 return '当前构建无效果,将在 '+formatWhole(n(6).sub(player[this.layer].buyables[this.id]))+' 进阶构建II后产生'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(x).mul(5).max(1).log(2).max(1).mul(10)
+                return n(x).add(1).mul(10).log(10).add(2).pow(2).max(1).mul(10)
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                return n('1e500000').pow(x.add(1).pow(2).max(1).log(4).max(1)).pow(n(1.5).add(x.div(100))).pow(tmp.meta.buyables[41].effectCount[0])
+                return n('1e500000').pow(x.add(2).pow(2).log(4)).pow(n(1.5).add(x.div(100))).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.co.points.gte(this.cost())},
 			style() {return {'width': "226px", "min-width": "100px", 'height': "226px",}},
-            unlocks(){return n(228)},
-            unlocked(){return player.meta.levelTotal.gte(228)},
+            unlocks(){return n(128)},
+            unlocked(){return player.meta.levelTotal.gte(128)},
         },
         23: {
             title() {
@@ -346,25 +333,25 @@ addLayer("meta", {
                 return '下一个: '+format(this.cost())+' b<br>(+'+format(n(this.gain()))+'%)<br><br>构建效果:<br> '+this.effect()
             },
             effect(){
-                if(player[this.layer].buyables[this.id].gte(55)){
+                if(player[this.layer].buyables[this.id].gte(32)){
                     return '自动购买B能量且无消耗'
                 }
-                return '当前构建无效果,将在 '+formatWhole(n(55).sub(player[this.layer].buyables[this.id]))+' 进阶构建II后产生'
+                return '当前构建无效果,将在 '+formatWhole(n(32).sub(player[this.layer].buyables[this.id]))+' 进阶构建II后产生'
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(x).add(4).pow(2).min(6000)
+                return n(x).add(20).pow(1.75)//.min(6000)
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                return n(x).add(4).root(2).factorial().pow(tmp.meta.buyables[41].effectCount[0])
+                return n(x).add(25).root(2).factorial().add(10000).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return player.b.value.gte(this.cost())},
 			style() {return {'width': "226px", "min-width": "100px", 'height': "226px",}},
-            unlocks(){return n(250)},
-            unlocked(){return player.meta.levelTotal.gte(250)},
+            unlocks(){return n(169)},
+            unlocked(){return player.meta.levelTotal.gte(169)},
         },
         31: {
             title() {
@@ -377,37 +364,28 @@ addLayer("meta", {
                 return player.meta.buyables[11].pow(player.meta.buyables[21])
             },
             effect(){
-                if(player[this.layer].buyables[this.id].gte(600)){
+                if(player[this.layer].buyables[this.id].gte(175)){
                     return '根据 基础构建I<sup>进阶构建I</sup> 数量 提升n<sub>s</sub>乘数<br><br>mul<sub>s</sub>(计数) = lg( 计数 + 10 )<br>mul<sub>s</sub>('+format(this.count())+') = '+format(n(this.count()).add(10).log(10))
                 }
-                return '当前构建无效果,将在 '+formatWhole(n(600).sub(player[this.layer].buyables[this.id]))+' 至高构建I后产生'
+                return '当前构建无效果,将在 '+formatWhole(n(175).sub(player[this.layer].buyables[this.id]))+' 至高构建I后产生'
             },
             effectCount(){
                 return n(this.count()).add(10).log(10)
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(x).add(1).pow(9).max(1).log(2).max(1)
+                return n(x).add(10).pow(10).max(1).log(2).max(1)
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                if(n(x).add(1).pow(27).gte(1e80)){
-                    x = x.mul(1.5)
-                }
-                if(n(x).add(1).pow(27).gte(1e100)){
-                    x = x.mul(1.5)
-                }
-                if(n(x).add(1).pow(27).gte(1e108)){
-                    x = x.mul(1.5)
-                }
-                return n(x).add(1).pow(27).pow(tmp.meta.buyables[41].effectCount[0])
+                return n(x).add(10).pow(x.sqrt().div(2).add(16)).add(x.sqrt().mul(3.6).factorial()).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return n(this.count()).gte(this.cost())},
 			style() {return {'width': "338px", "min-width": "100px", 'height': "338px",}},
-            unlocks(){return n(330)},
-            unlocked(){return player.meta.levelTotal.gte(330)},
+            unlocks(){return n(369)},
+            unlocked(){return player.meta.levelTotal.gte(369)},
         },
         32: {
             title() {
@@ -429,19 +407,19 @@ addLayer("meta", {
                 return n(this.count()).add(10).log(10)
             },
             gain(x=player[this.layer].buyables[this.id]){
-                return n(4).add(x)
+                return n(200).add(x.mul(50))
             },
             buy() {
                 player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].plus(1)
                 player.meta.exp = player.meta.exp.add(this.gain())
             },
             cost(x){
-                return n(2).pow(x.add(1)).root(1.25).pow(tmp.meta.buyables[41].effectCount[0])
+                return x.div(2).pow(2).add(x.mul(5)).add(50).pow(tmp.meta.buyables[41].effectCount[0])
             },
             canAfford(){return n(this.count()).gte(this.cost())},
 			style() {return {'width': "338px", "min-width": "100px", 'height': "338px",}},
-            unlocks(){return n(707)},
-            unlocked(){return player.meta.levelTotal.gte(707)},
+            unlocks(){return n(500)},
+            unlocked(){return player.meta.levelTotal.gte(500)},
         },
         41: {
             title() {
@@ -504,7 +482,9 @@ addLayer("meta", {
                 return a
             },
             effectCount(){
-                return [n(1).div(player[this.layer].buyables[this.id].root(2).sub(25).mul(0.28).max(1))]
+                return [
+                    player[this.layer].buyables[this.id].gte(500) ? n(1).div(player[this.layer].buyables[this.id].root(2).sub(12).max(10).log10().max(1)) : n(1)
+                ]
             },
             gain(x=player[this.layer].buyables[this.id]){
                 return n(1)
@@ -526,7 +506,6 @@ addLayer("meta", {
 		11: {
 			name: "破碎集合",
 			challengeDescription(){
-			  return '进入破碎世界<br><br>重置:重置先前的所有与凌片<br><br>变化:'+brokenWorldEffect()+'<br><br>扩展:<br>完成目标后你可以进入下一层并选择增加一个集合公式的潜力值并解锁<br>潜力值获取根据完成的目标数量增加<br>在扩展中获得的集合公式效果增加百倍,退出时失效<br><br>目标: '+formatWhole(player.meta.goals)+' / '+formatWhole(this.nextLayer())
 			},
 			unlocked(){return player.meta.tower.gte(1)},
 			nextLayer(){return n(5)},
@@ -599,9 +578,11 @@ addLayer("meta", {
                 buttonStyle(){return{'border-color': '#aaa'}},
                 unlocked(){return player.meta.tower.gte(1)},
                 content:[
-                    ["blank", "100px"],
-                    'challenges',
-                    ["blank", "100px"],
+                    ["blank", "30px"],
+                    ["display-text", function() {return '<div><h2>破碎集合</h2></div>'}],
+                    ["display-text", function() {return '进入破碎世界<br><br>重置:<br>重置先前的所有与凌片<br><br>扩展:<br>完成目标后你可以进入下一层并选择增加一个集合公式的潜力值并解锁<br>潜力值获取根据完成的目标数量增加<br>在扩展中获得的集合公式效果增加百倍,退出时失效'}],
+                    ["blank", "30px"],
+                    ["microtabs", "破碎集合目标"],
                 ]
             },
             "集合公式":{
@@ -661,6 +642,16 @@ addLayer("meta", {
 				]
 			},
         },
+        '破碎集合目标':{
+            " 目 标 ":{
+                unlocked(){return player.meta.tower.gte(1)},
+                content:[
+                    ["blank", "30px"],
+                    ["display-text", function() {return '目标'}],
+                    ["blank", "100px"],
+                ]
+            },
+		},
     },
     displayFormula() {
         let f = "0";
@@ -698,7 +689,7 @@ addLayer("meta", {
         ["blank", "25px"],
         ["microtabs", "主要"],
     ],
-    layerShown() { return tmp.goals.unlocks>=8 || true},
+    layerShown() { return tmp.goals.unlocks>=8},
     componentStyles: {
         achievement: {
             "border-radius": "5%",

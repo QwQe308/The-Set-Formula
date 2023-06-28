@@ -6,7 +6,7 @@
 	margin: auto;
 	-webkit-text-size-adjust: none;
 	text-size-adjust: none;
-	user-select: none
+	user-select: none;
 }
 
 h1, h2, h3, b, input, .pesterlog > * > * {
