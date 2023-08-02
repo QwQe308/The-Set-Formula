@@ -661,7 +661,7 @@ function loadVue() {
 			displayIntFormula,
 
             /*!*/
-            resize,
+            /* resize, */
             /* fullResize, */
 		},
 	})
