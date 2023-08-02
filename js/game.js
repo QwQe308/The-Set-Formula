@@ -429,7 +429,7 @@ var interval = setInterval(function() {
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
-    if(ticking) {
+    /* if(ticking) {
         let smallLayers = document.getElementsByClassName("small")
         for(i in smallLayers){
             if(!smallLayers[i].parentElement) continue
@@ -445,7 +445,7 @@ var interval = setInterval(function() {
             container.classList.add("shown")
         }
 	    ticking = false
-    }
+    } */
 }, 50)
 
 setInterval(function() {needCanvasUpdate = true}, 500)
