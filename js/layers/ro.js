@@ -1,6 +1,8 @@
 //自动轮盘间隔
 function getAutoSpinInterval(){
-    return n(0.05)//秒
+    let basicTimer = n(0.05)
+    if(player.meta.buyables[41].gte(400)) basicTimer = basicTimer.div(tmp.meta.buyables[41].effectCount[1])
+    return basicTimer//秒
 }
 
 addLayer("ro", {
@@ -151,7 +153,9 @@ addLayer("ro", {
                 let lastC = n(0)
 
                 if((player.ro.points.gte(tmp.ro.roReq) && player.meta.buyables[21].gte(15)) || player.meta.buyables[21].lt(15)){
-                    if(player.ro.points.lt(bulk)){bulk = player.ro.points.div(tmp.ro.roReq).sub(1).max(1)}
+                    if(tmp.ac.unlocks>=5) bulk = bulk.mul(5)
+                    if(player.ro.points.lt(bulk.mul(tmp.ro.roReq))){bulk = player.ro.points.div(tmp.ro.roReq).floor()}
+
                     let pow = tmp.ro.roLevel>=2 ? n(Math.random() * 3 - 1) : n(Math.random() * 2 - 1)
                     let num = n(10).pow(pow)
 
@@ -170,7 +174,7 @@ addLayer("ro", {
                                 player.ro.c = player.ro.c.add(num)
                             }
 
-                            lastC = lastC.add(num)
+                            lastC = lastC.add(num.div(bulk))
                         }else if(a>=70){
                             if(player.meta.buyables[22].gte(6)){
                                 player.ro.b = player.ro.b.add(num)
@@ -181,7 +185,7 @@ addLayer("ro", {
                                 player.ro.b = player.ro.b.add(num)
                             }
 
-                            lastB = lastB.add(num)
+                            lastB = lastB.add(num.div(bulk))
                         }else{
                             if(player.meta.buyables[22].gte(6)){
                                 player.ro.a = player.ro.a.add(num)
@@ -192,7 +196,7 @@ addLayer("ro", {
                                 player.ro.a = player.ro.a.add(num)
                             }
 
-                            lastA = lastA.add(num)
+                            lastA = lastA.add(num.div(bulk))
                         }
                     }else{
                         if(a>=90){
@@ -205,7 +209,7 @@ addLayer("ro", {
                                 player.ro.b = player.ro.b.add(num)
                             }
         
-                            lastB = lastB.add(num)
+                            lastB = lastB.add(num.div(bulk))
                         }else{
                             if(player.meta.buyables[22].gte(6)){
                                 player.ro.a = player.ro.a.add(num)
@@ -216,7 +220,7 @@ addLayer("ro", {
                                 player.ro.a = player.ro.a.add(num)
                             }
 
-                            lastA = lastA.add(num)
+                            lastA = lastA.add(num.div(bulk))
                         }
                     }
                 }
@@ -322,7 +326,7 @@ addLayer("ro", {
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RA("+format(player[this.layer].a)+") ‖ RA<sub>p</sub>("+format(player[this.layer].aPower)+") = "+format(player[this.layer].valueA)+" ‖ "+format(player[this.layer].valueAPower)+"</h3>"
+                return `<h3>RA(${format(player[this.layer].a)}) = ${format(player[this.layer].valueA)} ‖ RA<sub>p</sub>(${format(player[this.layer].aPower)}) = ${format(player[this.layer].valueAPower)}`
             }
             return "<h3>RA("+format(player[this.layer].a)+") = "+format(player[this.layer].valueA)+"</h3>"
         }],
@@ -330,7 +334,7 @@ addLayer("ro", {
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RB("+format(player[this.layer].b)+") ‖ RB<sub>p</sub>("+format(player[this.layer].bPower)+") = "+format(player[this.layer].valueB)+" ‖ "+format(player[this.layer].valueBPower)+"</h3>"
+                return `<h3>RB(${format(player[this.layer].b)}) = ${format(player[this.layer].valueB)} ‖ RB<sub>p</sub>(${format(player[this.layer].bPower)}) = ${format(player[this.layer].valueBPower)}`
             }
             return "<h3>RB("+format(player[this.layer].b)+") = "+format(player[this.layer].valueB)+"</h3>"
         }],
@@ -338,7 +342,7 @@ addLayer("ro", {
         "blank",
         ["display-text", function() {
             if(tmp.goals.unlocks>=6){
-                return "<h3>RC("+format(player[this.layer].c)+") ‖ RC<sub>p</sub>("+format(player[this.layer].cPower)+") = "+format(player[this.layer].valueC)+" ‖ "+format(player[this.layer].valueCPower)+"</h3>"
+                return `<h3>RC(${format(player[this.layer].c)}) = ${format(player[this.layer].valueC)} ‖ RC<sub>p</sub>(${format(player[this.layer].cPower)}) = ${format(player[this.layer].valueCPower)}`
             }
             return tmp.ro.roLevel>=2 ? "<h3>RC("+format(player[this.layer].c)+") = "+format(player[this.layer].valueC)+"</h3>" : ''
         }],

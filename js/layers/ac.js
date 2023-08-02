@@ -146,8 +146,8 @@ addLayer("ac", {
 		5: {
 			requirementDescription: "特权阶级5",
 			requirementDescriptionEN: "Perk Tier 5",
-			effectDescription: ">———————————————————————————————————————————————————————————————————————————————————————————————————————————<<br>完全重置目标,A能量,阿尔法能量,B能量,轮盘,压缩点数(保留压缩点数解锁)<br><br>轮盘能量获取可以超出上限<br>改善t<sub>2</sub>获取<br><br>一次可以获得100级的进化<br>自动购买阿尔法能量<br>B能量不再重置A能量以及进化<br>阿尔法能量不再重置任何<br>>———————————————————————————————————————————————————————————————————————————————————————————————————————————<",
-			effectDescriptionEN: ">———————————————————————————————————————————————————————————————————————————————————————————————————————————<<br>Fully Reset Goals,A-Power,Alpha Energy,B-Power,Wheel,Compressed Point(keep it unlocked)<br><br>Wheel Energy can bypass its cap, while its gain decays post-cap<br>Improve t<sub>2</sub> gain<br><br>Bulk buy 100 Avolve levels<br>Automate Alpha Energy<br>B-Power no longer resets A-Power and Avolve<br>Alpha Energy resets nothing<br>>———————————————————————————————————————————————————————————————————————————————————————————————————————————<",
+			effectDescription: ">———————————————————————————————————————————————————————————————————————————————————————————————————————————<<br>完全重置目标,A能量,阿尔法能量,B能量,轮盘,压缩点数(保留压缩点数解锁)<br><br>轮盘能量获取可以超出上限<br>改善t<sub>2</sub>获取<br>批量旋转5次转盘(倍增奖励)<br>一次可以获得100级的进化<br>自动购买阿尔法能量<br>B能量不再重置A能量以及进化<br>阿尔法能量不再重置任何东西<br>>———————————————————————————————————————————————————————————————————————————————————————————————————————————<",
+			effectDescriptionEN: ">———————————————————————————————————————————————————————————————————————————————————————————————————————————<<br>Fully Reset Goals,A-Power,Alpha Energy,B-Power,Wheel,Compressed Point(keep it unlocked)<br><br>Wheel Energy can bypass its cap, while its gain decays post-cap<br>Improve t<sub>2</sub> gain<br>Bulk spin up to 5 times(multplies reward)<br>Bulk buy 100 Avolve levels<br>Automate Alpha Energy<br>B-Power no longer resets A-Power and Avolve<br>Alpha Energy resets nothing<br>>———————————————————————————————————————————————————————————————————————————————————————————————————————————<",
 			done() {
 				return tmp.ac.unlocks>=5
 			},

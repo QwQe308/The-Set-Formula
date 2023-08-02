@@ -33,7 +33,7 @@ addLayer("b", {
         return new Decimal(exp);
     },
     costScalingStart: new Decimal(15),
-    costScalingInc() { return new Decimal(0.0317).sub(player.meta.buyables[32].gte(10) ? player.meta.buyables[32].mul(0.001) : n(0)).max(0) },
+    costScalingInc() { return new Decimal(0.0317).div(player.meta.buyables[32].gte(10) ? player.meta.buyables[32].mul(0.1).add(1) : n(1)).max(0) },
     canBuyMax() { return tmp.ac.unlocks>=4 },
     autoPrestige() { return player.meta.buyables[23].gte(32) },
     resetsNothing() { return player.meta.buyables[23].gte(32) },

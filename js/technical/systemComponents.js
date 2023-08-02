@@ -33,10 +33,20 @@ var systemComponents = {
 
 	'tree-node': {
 		props: ['layer', 'abb', 'size', 'prev'],
-		template: `
+		template: /*!*/`
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
+                /* if(layer.indexOf('metaSmall')+1){
+                    console.log(layer)
+                    fullResize(tmp[layer].subLayers)
+					return
+                } */
+                /* if(layer.indexOf('small')+1){
+                    console.log(layer)
+                    resize(layer)
+					return
+                } */
 				if(layer=='Information'){
 					showTab('info-tab')
 					getActiveClass('Information')

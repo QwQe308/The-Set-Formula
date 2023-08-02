@@ -66,7 +66,7 @@ addLayer("co", {
     },
     displayFormula(){
         let f = 'Max( '+maxText([player.superValue.sub(200),n(0)],'max',['n<sub>s</sub> - 200', '0'])+' ) × 50'
-        if(tmp.ac.unlocks>=6){f = 'Max( '+maxText([player.superValue.sub(200),n(0)],'max',['n<sub>s</sub> - 200', '0'])+' )<sup>50'+(player.meta.buyables[41].gte(150) ? ' + lg<sup>0.75</sup>( CoP + 10 )' : '')+'</sup>'}
+        if(tmp.ac.unlocks>=6){f = 'Max( '+maxText([player.superValue.sub(200),n(0)],'max',['n<sub>s</sub> - 200', '0'])+' )<sup>50'+(player.meta.buyables[41].gte(150) ? ' + lg<sup>0.8</sup>( CoP + 10 )/2.5' : '')+'</sup>'}
 
         let f2 = colorText('( ',2)+colorText('lg( ',1)+'Max( '+maxText([player.co.points.sub(1e200),n(200)],'max',['J - 1e200','10'])+' )'+colorText(' )',1)+colorText(' )<sup>0.1</sup>',2)
 
@@ -78,7 +78,7 @@ addLayer("co", {
     },
     calculateValue(val=player.superValue) {
         if(tmp.ac.unlocks>=6){
-            val = val.sub(200).max(0).pow(n(50).add(player.meta.buyables[41].gte(150) ? n(player[this.layer].value.add(10).log(10).pow(0.75)) : n(0)))
+            val = val.sub(200).max(0).pow(n(50).add(player.meta.buyables[41].gte(150) ? n(player[this.layer].value.add(10).log(10).pow(0.8).div(2.5)) : n(0)))
         }else{
             val = val.sub(200).max(0).mul(50)
         }

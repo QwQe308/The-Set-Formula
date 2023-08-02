@@ -212,7 +212,7 @@ function calculateValue(t) {
 }
 
 function calculateValueSuper(t) {
-	let mul = player.meta.buyables[31].gte(175) ? tmp.meta.buyables[31].effectCount : n(1)
+	let mul = player.meta.buyables[31].gte(175) ? tmp.meta.buyables[31].effectCount.pow(3).div(1e4) : n(1)
 	return t.add(10).log(10).mul(mul)
 }
 

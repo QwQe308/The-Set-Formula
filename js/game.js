@@ -395,14 +395,12 @@ function hardReset(resetOptions) {
 	save(true);
 	window.location.reload();
 }
-
-var ticking = false
-
+/*!*/
+var ticking = true
+/*!*/
 var interval = setInterval(function() {
 	if (player===undefined||tmp===undefined) return;
-	if (ticking) return;
 	if (tmp.gameEnded&&!player.keepGoing) return;
-	ticking = true
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
 	let trueDiff = diff
@@ -431,7 +429,23 @@ var interval = setInterval(function() {
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
-	ticking = false
+    if(ticking) {
+        let smallLayers = document.getElementsByClassName("small")
+        for(i in smallLayers){
+            if(!smallLayers[i].parentElement) continue
+            let container = smallLayers[i].parentElement.parentElement.parentElement
+            let layersCount = 0
+            for(i in layers){
+                if(layers[i].row == layers[smallLayers[i]].row && layers[i].layerShown()) layersCount ++
+            }
+            container.style.maxHeight = layersCount*50-16+"px"
+            container.style.overflow = "hidden"
+            container.style.transitionDuration = "1s"
+            container.classList.add("extend")
+            container.classList.add("shown")
+        }
+	    ticking = false
+    }
 }, 50)
 
 setInterval(function() {needCanvasUpdate = true}, 500)

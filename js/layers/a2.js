@@ -1,5 +1,7 @@
 function getAutoA2GainTimer(){
-    return n(0.05)
+    let basicTimer = n(0.05)
+    if(player.meta.buyables[41].gte(400)) basicTimer = basicTimer.div(tmp.meta.buyables[41].effectCount[1])
+    return basicTimer
 }
 
 addLayer("a2", {

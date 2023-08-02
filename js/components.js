@@ -659,6 +659,10 @@ function loadVue() {
 			gridRun,
 			displayFormula,
 			displayIntFormula,
+
+            /*!*/
+            resize,
+            /* fullResize, */
 		},
 	})
 }
